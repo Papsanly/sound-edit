@@ -1,0 +1,47 @@
+{
+  "name": "sound-edit",
+  "main": "main.cjs",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "electron": "wait-on http://localhost:5173 && electron .",
+    "electron-dev": "concurrently \"pnpm run dev\" \"pnpm run electron\"",
+    "preelectron-pack": "pnpm run build",
+    "electron-pack": "electron-builder"
+  },
+  "build": {
+    "appId": "com.sound_edit",
+    "productName": "Sound Edit",
+    "directories": {
+      "output": "electron-dist"
+    },
+    "files": [
+      "dist/**/*",
+      "main.cjs"
+    ]
+  },
+  "dependencies": {
+    "electron-serve": "^1.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-is-dev": "^2.0.0",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "vite": "^5.0.8",
+    "wait-on": "^7.2.0"
+  }
+}
