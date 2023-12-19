@@ -20,6 +20,13 @@ function createWindow() {
       nodeIntegration: true,
     },
     show: false,
+    frame: false,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: 'rgba(51, 51, 51, 1)',
+      symbolColor: 'rgba(156, 156, 156, 1)',
+      height: 34,
+    },
   })
   mainWindow.maximize()
 

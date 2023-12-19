@@ -9,14 +9,14 @@ export default function App() {
   return (
     <main className={style.app}>
       <div className={style.div1}>
-        <div className={style.div2}>
-          <Info />
-          <Controls />
-          <Tools />
-        </div>
-        <Timeline />
+        <Info />
+        <Controls />
+        <Tools />
       </div>
-      <Effects />
+      <div className={style.div2}>
+        <Timeline />
+        <Effects />
+      </div>
     </main>
   )
 }
