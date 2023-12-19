@@ -1,0 +1,19 @@
+.item {
+  display: flex;
+  padding: var(--padding-sm);
+  border-radius: var(--round-md);
+}
+
+svg {
+  height: var(--icon-size-md);
+  width: var(--icon-size-md);
+  fill: var(--color-disabled);
+}
+
+.item[data-active] {
+  background-color: var(--color-setting);
+}
+
+.item[data-active] svg {
+  fill: var(--color-background-default);
+}

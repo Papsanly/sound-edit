@@ -1,0 +1,25 @@
+.toggle {
+  width: 60px;
+  height: 30px;
+  background-color: var(--color-background-dark);
+  display: flex;
+  justify-content: flex-start;
+  border-radius: var(--round-max);
+  padding: 5px;
+  cursor: pointer;
+}
+
+.toggle[data-toggled] {
+  justify-content: flex-end;
+}
+
+.toggle[data-toggled] .handle {
+  background: var(--color-setting);
+}
+
+.handle {
+  aspect-ratio: 1;
+  height: 100%;
+  background-color: var(--color-disabled);
+  border-radius: var(--round-max);
+}

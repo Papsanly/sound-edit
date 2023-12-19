@@ -1,0 +1,6 @@
+.effects {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  gap: var(--padding-lg);
+}

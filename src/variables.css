@@ -1,0 +1,31 @@
+:root {
+  --color-background-dark: rgba(35, 35, 35, 1);
+  --color-background-darker: rgba(30, 30, 30, 1);
+  --color-background-default: rgba(51, 51, 51, 1);
+
+  --color-slice-default: rgba(115, 165, 91, 1);
+  --color-slice-selected: rgba(76, 125, 171, 1);
+  --color-slice-volume: rgba(57, 105, 150, 1);
+
+  --color-disabled: rgba(156, 156, 156, 1);
+  --color-line: rgba(238, 238, 238, 0.56);
+  --color-setting: rgba(76, 125, 171, 1);
+
+  --color-text-default: rgba(238, 238, 238, 1);
+
+  --font-family: 'JetBrains Mono', monospace;
+  --font-size-lg: 20px;
+  --font-size-md: 16px;
+  --font-size-sm: 12px;
+
+  --padding-lg: 20px;
+  --padding-md: 10px;
+  --padding-sm: 7px;
+
+  --round-max: 999px;
+  --round-lg: 10px;
+  --round-md: 5px;
+  --round-sm: 3px;
+
+  --icon-size-md: 20px;
+}

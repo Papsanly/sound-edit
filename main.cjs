@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require('electron')
-const path = require('path')
 const serve = require('electron-serve')
 const loadURL = serve({ directory: 'dist' })
 
@@ -10,19 +9,23 @@ function isDev() {
 }
 
 function createWindow() {
+  if (isDev()) {
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+  }
+
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 700,
+    backgroundColor: 'black',
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js'),
     },
-    icon: path.join(__dirname, 'public/favicon.png'),
     show: false,
   })
+  mainWindow.maximize()
 
   if (isDev()) {
     mainWindow.loadURL('http://localhost:5173/').then()
+    mainWindow.webContents.openDevTools()
   } else {
     loadURL(mainWindow)
   }
