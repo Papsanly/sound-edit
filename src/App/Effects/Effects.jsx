@@ -6,14 +6,14 @@ export default function Effects() {
     <div className={style.effects}>
       <EffectItem
         name={'Effect 1'}
-        options={[{ label: 'Option 1', value: 1 }]}
+        options={[{ id: 1, label: 'Option 1', value: 1 }]}
       />
       <EffectItem
         enabled
         name={'Effect 2'}
         options={[
-          { label: 'Option 1', value: 1 },
-          { label: 'Option 2', value: 0 },
+          { id: 1, label: 'Option 1', value: 1 },
+          { id: 2, label: 'Option 2', value: 0 },
         ]}
       />
     </div>

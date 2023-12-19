@@ -5,3 +5,9 @@
   border-radius: var(--round-md);
   background: var(--color-slice-default);
 }
+
+.name {
+  position: absolute;
+  bottom: var(--padding-sm);
+  left: var(--padding-sm);
+}

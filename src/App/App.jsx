@@ -7,16 +7,16 @@ import Effects from './Effects'
 
 export default function App() {
   return (
-    <main className={style.app}>
-      <div className={style.div1}>
+    <div className={style.app}>
+      <header className={style.header}>
         <Info />
         <Controls />
         <Tools />
-      </div>
-      <div className={style.div2}>
+      </header>
+      <main className={style.main}>
         <Timeline />
         <Effects />
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }

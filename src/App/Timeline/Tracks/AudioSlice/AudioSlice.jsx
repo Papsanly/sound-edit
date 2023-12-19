@@ -1,6 +1,6 @@
 import style from './AudioSlice.module.css'
 
-export default function AudioSlice({ track, x, width }) {
+export default function AudioSlice({ track, x, width, name }) {
   return (
     <div
       className={style.audioSlice}
@@ -9,6 +9,8 @@ export default function AudioSlice({ track, x, width }) {
         width: `${width}px`,
         top: `calc(${track} * var(--track-height) + var(--slice-padding))`,
       }}
-    ></div>
+    >
+      <p className={style.name}>{name}</p>
+    </div>
   )
 }

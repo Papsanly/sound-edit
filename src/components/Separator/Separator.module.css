@@ -1,0 +1,14 @@
+.separator {
+  background: #575757;
+  border-radius: var(--round-max);
+}
+
+.separator[data-horizontal] {
+  width: 100%;
+  height: 3px;
+}
+
+.separator[data-vertical] {
+  height: 100%;
+  width: 3px;
+}

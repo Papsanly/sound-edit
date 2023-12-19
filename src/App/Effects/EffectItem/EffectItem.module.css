@@ -1,7 +1,7 @@
 .effectItem {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-md);
+  gap: var(--padding-lg);
 }
 
 .title {

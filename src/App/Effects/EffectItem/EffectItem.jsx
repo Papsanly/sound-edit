@@ -1,15 +1,24 @@
 import style from './EffectItem.module.css'
-import Option from './Option'
-import Toggle from '@/components/Toggle/index.js'
+import Range from '@/components/Range'
+import Toggle from '@/components/Toggle'
 
 export default function EffectItem({ enabled, name, options }) {
   return (
     <div className={style.effectItem}>
       <div className={style.title}>
         <Toggle toggled={enabled} />
-        <p className={style.titleText}>{name}</p>
+        <p>{name}</p>
       </div>
-      {enabled && options.map(option => <Option key={option.id} {...option} />)}
+      {enabled &&
+        options.map(option => (
+          <Range
+            key={option.id}
+            {...option}
+            id={`${name}-${option.id}`}
+            min={-10}
+            max={5}
+          />
+        ))}
     </div>
   )
 }
