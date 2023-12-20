@@ -1,10 +1,9 @@
 import style from './Toggle.module.css'
-import { motion } from 'framer-motion'
 
-export default function App({ toggled, onClick }) {
+export default function Toggle({ enabled, onClick }) {
   return (
-    <div onClick={onClick} className={style.toggle} data-toggled={toggled}>
-      <motion.div className={style.handle} layout />
+    <div onClick={onClick} className={style.toggle} data-enabled={enabled}>
+      <div className={style.handle} />
     </div>
   )
 }

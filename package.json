@@ -1,6 +1,6 @@
 {
   "name": "sound-edit",
-  "main": "main.cjs",
+  "main": "electron.cjs",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -26,10 +26,12 @@
     ]
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
     "electron-serve": "^1.2.0",
     "framer-motion": "^10.16.16",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.0.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",

@@ -9,11 +9,11 @@
   cursor: pointer;
 }
 
-.toggle[data-toggled] {
+.toggle[data-enabled='true'] {
   justify-content: flex-end;
 }
 
-.toggle[data-toggled] .handle {
+.toggle[data-enabled='true'] .handle {
   background: var(--color-setting);
 }
 

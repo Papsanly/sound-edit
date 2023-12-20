@@ -1,6 +1,8 @@
 import style from './Range.module.css'
+import { nanoid } from '@reduxjs/toolkit'
 
-export default function Range({ id, value, min, max, label, units }) {
+export default function Range({ value, min, max, name, units, onChange }) {
+  const id = nanoid()
   return (
     <div className={style.rangeContainer}>
       <input
@@ -13,9 +15,10 @@ export default function Range({ id, value, min, max, label, units }) {
         style={{
           backgroundSize: `${((value - min) * 100) / (max - min)}% 100%`,
         }}
+        onChange={onChange}
       />
       <label htmlFor={id} className={style.label}>
-        {label}: {value}
+        {name}: {value}
         {units}
       </label>
     </div>
