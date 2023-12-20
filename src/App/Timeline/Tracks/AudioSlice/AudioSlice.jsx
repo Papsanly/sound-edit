@@ -5,9 +5,9 @@ export default function AudioSlice({ track, x, width, name }) {
     <div
       className={style.audioSlice}
       style={{
-        left: `calc(${x}px + var(--slice-padding))`,
+        left: `calc(${x}px + var(--padding-sm))`,
         width: `${width}px`,
-        top: `calc(${track} * var(--track-height) + var(--slice-padding))`,
+        top: `calc(${track} * var(--track-height) + var(--padding-sm))`,
       }}
     >
       <p className={style.name}>{name}</p>

@@ -1,17 +1,17 @@
 :root {
+  --color-background-default: rgba(51, 51, 51, 1);
   --color-background-dark: rgba(35, 35, 35, 1);
   --color-background-darker: rgba(30, 30, 30, 1);
-  --color-background-default: rgba(51, 51, 51, 1);
 
-  --color-slice-default: rgba(115, 165, 91, 1);
-  --color-slice-selected: rgba(76, 125, 171, 1);
-  --color-slice-volume: rgba(57, 105, 150, 1);
-
-  --color-disabled: rgba(156, 156, 156, 1);
-  --color-line: rgba(238, 238, 238, 0.56);
-  --color-setting: rgba(76, 125, 171, 1);
+  --color-accent-default: rgba(115, 165, 91, 1);
+  --color-accent-variant: rgb(76, 125, 171);
 
   --color-text-default: rgba(238, 238, 238, 1);
+
+  --color-icon-bright: rgba(238, 238, 238, 1);
+  --color-icon-default: rgba(156, 156, 156, 1);
+  --color-icon-muted: rgb(87, 87, 87);
+  --color-icon-dark: rgba(51, 51, 51, 1);
 
   --font-family: 'JetBrains Mono', monospace;
   --font-size-lg: 20px;
@@ -21,11 +21,23 @@
   --padding-lg: 20px;
   --padding-md: 10px;
   --padding-sm: 7px;
+  --padding-xsm: 2px;
 
   --round-max: 999px;
   --round-lg: 10px;
   --round-md: 5px;
-  --round-sm: 3px;
+
+  --thikness-lg: 15px;
+  --thikness-md: 10px;
+  --thikness-sm: 3px;
 
   --icon-size-md: 20px;
+
+  --current-time-opacity: 0.56;
+  --current-time-color: white;
+
+  --header-height: 30px;
+  --effects-width: 250px;
+  --track-height: 100px;
+  --option-height: 34px;
 }

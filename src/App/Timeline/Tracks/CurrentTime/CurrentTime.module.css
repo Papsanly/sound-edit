@@ -1,0 +1,30 @@
+.currentTime {
+  --top: calc(
+    -1 * var(--padding-sm) - (var(--icon-size-md) + var(--thikness-lg)) / 2
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  opacity: var(--current-time-opacity);
+  top: var(--top);
+  height: calc(100% - var(--padding-sm) - var(--top));
+  z-index: 10;
+}
+
+.head {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  border-radius: var(--round-max);
+  background: var(--current-time-color);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.bar {
+  margin-top: -10px;
+  height: 100%;
+  width: var(--thikness-sm);
+  border-radius: var(--round-max);
+  background: var(--current-time-color);
+}

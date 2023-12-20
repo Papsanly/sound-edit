@@ -4,10 +4,13 @@
   box-sizing: border-box;
 }
 
+html,
+body,
 #root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
+}
+
+#root {
   font-family: var(--font-family);
   color: var(--color-text-default);
   background: var(--color-background-default);

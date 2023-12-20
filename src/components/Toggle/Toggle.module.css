@@ -14,12 +14,12 @@
 }
 
 .toggle[data-enabled='true'] .handle {
-  background: var(--color-setting);
+  background: var(--color-accent-variant);
 }
 
 .handle {
   aspect-ratio: 1;
   height: 100%;
-  background-color: var(--color-disabled);
+  background-color: var(--color-icon-default);
   border-radius: var(--round-max);
 }

@@ -3,11 +3,11 @@
   outline: none;
   -webkit-appearance: none;
   width: 100%;
-  height: 40px;
+  height: var(--option-height);
   border-radius: var(--round-md);
-  transition: transform 0.3s;
   background: var(--color-background-dark)
-    linear-gradient(var(--color-setting), var(--color-setting)) no-repeat;
+    linear-gradient(var(--color-accent-variant), var(--color-accent-variant))
+    no-repeat;
 }
 
 .range::-webkit-slider-thumb {

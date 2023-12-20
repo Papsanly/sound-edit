@@ -13,10 +13,8 @@ export default function App() {
         <Controls />
         <Tools />
       </header>
-      <main className={style.main}>
-        <Timeline />
-        <Effects />
-      </main>
+      <Timeline />
+      <Effects />
     </div>
   )
 }

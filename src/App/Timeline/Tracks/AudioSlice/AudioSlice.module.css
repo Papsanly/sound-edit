@@ -1,9 +1,8 @@
 .audioSlice {
-  --slice-padding: var(--padding-sm);
-  height: calc(var(--track-height) - 2 * var(--slice-padding));
+  height: calc(var(--track-height) - 2 * var(--padding-sm));
   position: absolute;
   border-radius: var(--round-md);
-  background: var(--color-slice-default);
+  background: var(--color-accent-default);
 }
 
 .name {

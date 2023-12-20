@@ -1,5 +1,4 @@
 .tracks {
-  --track-height: 100px;
   display: flex;
   flex: 1;
   position: relative;

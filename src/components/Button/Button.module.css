@@ -7,13 +7,13 @@
 svg {
   height: var(--icon-size-md);
   width: var(--icon-size-md);
-  fill: var(--color-disabled);
+  fill: var(--color-icon-default);
 }
 
 .item[data-active] {
-  background-color: var(--color-setting);
+  background-color: var(--color-accent-variant);
 }
 
 .item[data-active] svg {
-  fill: var(--color-background-default);
+  fill: var(--color-icon-dark);
 }

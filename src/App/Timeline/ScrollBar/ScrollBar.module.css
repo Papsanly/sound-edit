@@ -1,6 +1,6 @@
 .scrollBar {
-  background: var(--color-line);
-  height: 10px;
+  background: var(--color-icon-default);
+  height: var(--thikness-md);
   position: relative;
   border-radius: var(--round-max);
 }
@@ -8,18 +8,18 @@
 .start,
 .end {
   position: absolute;
-  background: var(--color-line);
-  top: 2px;
-  height: 6px;
-  width: 6px;
+  background: var(--color-icon-bright);
+  top: var(--padding-xsm);
+  height: calc(var(--thikness-md) - 2 * var(--padding-xsm));
+  width: calc(var(--thikness-md) - 2 * var(--padding-xsm));
   z-index: 10;
   border-radius: var(--round-max);
 }
 
 .start {
-  left: 2px;
+  left: var(--padding-xsm);
 }
 
 .end {
-  right: 2px;
+  right: var(--padding-xsm);
 }

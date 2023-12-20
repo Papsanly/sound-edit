@@ -1,14 +1,14 @@
 .separator {
-  background: #575757;
+  background: var(--color-icon-muted);
   border-radius: var(--round-max);
 }
 
 .separator[data-horizontal] {
-  width: 100%;
-  height: 3px;
+  width: auto;
+  height: var(--thikness-sm);
 }
 
 .separator[data-vertical] {
-  height: 100%;
-  width: 3px;
+  height: auto;
+  width: var(--thikness-sm);
 }

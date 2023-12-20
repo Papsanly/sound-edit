@@ -1,5 +1,4 @@
 .tools {
   display: flex;
-  align-items: stretch;
   gap: var(--padding-sm);
 }

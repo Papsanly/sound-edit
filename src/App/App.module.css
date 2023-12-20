@@ -1,23 +1,16 @@
 .app {
-  align-items: stretch;
-  background-color: var(--color-background-default);
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr var(--effects-width);
+  grid-template-rows: auto 1fr;
   gap: var(--padding-lg);
+  background-color: var(--color-background-default);
   padding: var(--padding-md);
 }
 
-.main {
-  display: flex;
-  flex: 1;
-  gap: var(--padding-lg);
-}
-
 .header {
-  align-items: stretch;
-  padding-right: 270px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   -webkit-app-region: drag;
 }
