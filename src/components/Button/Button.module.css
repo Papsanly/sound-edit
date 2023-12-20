@@ -10,10 +10,10 @@ svg {
   fill: var(--color-icon-default);
 }
 
-.item[data-active] {
+.item[data-active='true'] {
   background-color: var(--color-accent-variant);
 }
 
-.item[data-active] svg {
+.item[data-active='true'] svg {
   fill: var(--color-icon-dark);
 }

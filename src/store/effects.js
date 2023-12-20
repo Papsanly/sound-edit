@@ -18,7 +18,7 @@ const initialState = {
   ],
 }
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'effects',
   initialState,
   reducers: {
@@ -36,7 +36,5 @@ export const slice = createSlice({
 })
 
 export const actions = slice.actions
-
 export const select = state => state.effects.all
-
 export default slice.reducer
