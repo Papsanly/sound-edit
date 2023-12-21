@@ -20,11 +20,29 @@ const slice = createSlice({
           x: 0,
           width: 300,
           name: filePath,
+          isEditingName: false,
         }
       })
     },
+    setName: (state, { payload: { audioSliceId, name } }) => {
+      state[audioSliceId].name = name
+    },
+    setIsEditingName: (state, { payload: { audioSliceId, isEditingName } }) => {
+      state[audioSliceId].isEditingName = isEditingName
+    },
   },
 })
+
+function findInObject(obj, predicate) {
+  const res = Object.entries(obj).find(([, value]) => predicate(value))
+  if (res) {
+    return res[0]
+  }
+}
+
+function getSelectedAudioSliceId(audioSlices) {
+  return findInObject(audioSlices, value => value.selected)
+}
 
 function findMaxTrack(state) {
   let maxTrack = Math.max(...Object.values(state).map(item => item.track))
@@ -32,9 +50,10 @@ function findMaxTrack(state) {
 }
 
 function deselect(state) {
-  const selectedAudioSliceId = findInObject(state, value => value.selected)
+  const selectedAudioSliceId = getSelectedAudioSliceId(state)
   if (selectedAudioSliceId) {
     state[selectedAudioSliceId].selected = false
+    state[selectedAudioSliceId].isEditingName = false
   }
 }
 
@@ -44,12 +63,5 @@ export default slice.reducer
 
 export const selectSelectedAudioSliceId = createSelector(
   [select],
-  audioSlices => findInObject(audioSlices, value => value.selected),
+  audioSlices => getSelectedAudioSliceId(audioSlices),
 )
-
-function findInObject(obj, predicate) {
-  const res = Object.entries(obj).find(([, value]) => predicate(value))
-  if (res) {
-    return res[0]
-  }
-}

@@ -24,3 +24,11 @@ button {
   background: transparent;
   -webkit-app-region: no-drag;
 }
+
+input[type='text'] {
+  font: inherit;
+  color: inherit;
+  outline: none;
+  border: none;
+  background: none;
+}

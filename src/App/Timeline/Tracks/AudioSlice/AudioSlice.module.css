@@ -5,7 +5,8 @@
   background: var(--color-accent-default);
 }
 
-.name {
+.name,
+.editName {
   position: absolute;
   width: calc(100% - 2 * var(--padding-sm));
   bottom: var(--padding-sm);
