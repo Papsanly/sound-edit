@@ -15,7 +15,13 @@ export default function Timeline() {
     >
       <TimeMarkers />
       <Tracks />
-      <ScrollBar start={0} end={400} />
+      <ScrollBar start={0} end={400} horizontal style={{ gridRow: 3 }} />
+      <ScrollBar
+        start={0}
+        end={400}
+        vertical
+        style={{ gridRow: 2, gridColumn: 2 }}
+      />
     </div>
   )
 }

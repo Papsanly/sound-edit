@@ -1,4 +1,5 @@
 .tracks {
+  grid-row: 2;
   display: flex;
   flex: 1;
   position: relative;

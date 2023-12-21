@@ -1,6 +1,5 @@
 .scrollBar {
   background: var(--color-icon-default);
-  height: var(--thikness-md);
   position: relative;
   border-radius: var(--round-max);
 }
@@ -9,17 +8,42 @@
 .end {
   position: absolute;
   background: var(--color-icon-bright);
-  top: var(--padding-xsm);
-  height: calc(var(--thikness-md) - 2 * var(--padding-xsm));
-  width: calc(var(--thikness-md) - 2 * var(--padding-xsm));
   z-index: 10;
   border-radius: var(--round-max);
+  height: calc(var(--thikness-md) - 2 * var(--padding-xsm));
+  width: calc(var(--thikness-md) - 2 * var(--padding-xsm));
 }
 
-.start {
+.scrollBar[data-horizontal='true'] {
+  height: var(--thikness-md);
+}
+
+.scrollBar[data-vertical='true'] {
+  width: var(--thikness-md);
+}
+
+.scrollBar[data-horizontal='true'] .start,
+.scrollBar[data-horizontal='true'] .end {
+  top: var(--padding-xsm);
+}
+
+.scrollBar[data-vertical='true'] .start,
+.scrollBar[data-vertical='true'] .end {
   left: var(--padding-xsm);
 }
 
-.end {
+.scrollBar[data-horizontal='true'] .start {
+  left: var(--padding-xsm);
+}
+
+.scrollBar[data-horizontal='true'] .end {
   right: var(--padding-xsm);
+}
+
+.scrollBar[data-vertical='true'] .start {
+  top: var(--padding-xsm);
+}
+
+.scrollBar[data-vertical='true'] .end {
+  bottom: var(--padding-xsm);
 }
