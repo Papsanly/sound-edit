@@ -17,8 +17,8 @@ const slice = createSlice({
         state[id] = {
           track: maxTrack + i,
           selected: false,
-          x: 0,
-          width: 300,
+          start: 0,
+          length: 3,
           name: fileName,
           isEditingName: false,
           editName: fileName,

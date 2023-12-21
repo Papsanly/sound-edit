@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   activeTool: 'select',
   activeControl: 'pause',
+  currentTime: 0,
 }
 
 const slice = createSlice({
