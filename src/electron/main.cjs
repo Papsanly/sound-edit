@@ -22,6 +22,7 @@ function createWindow() {
     height: 750,
     backgroundColor: 'black',
     autoHideMenuBar: true,
+    icon: path.join(__dirname, '../../public/favicon.ico'),
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.cjs'),
