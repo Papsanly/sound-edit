@@ -15,6 +15,7 @@ body,
   color: var(--color-text-default);
   background: var(--color-background-default);
   overflow: hidden;
+  user-select: none;
 }
 
 button {

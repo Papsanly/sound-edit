@@ -1,40 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { actions as audioSlicesActions } from '@/store/audioSlices.js'
+import allEffects from '@/lib/effects.js'
 
-const initialState = {
-  all: [
-    {
-      name: 'Effect 1',
-      enabled: false,
-      options: [{ name: 'Option 1', value: 0, min: -10, max: 5 }],
-    },
-    {
-      name: 'Effect 2',
-      enabled: false,
-      options: [
-        { name: 'Option 1', value: 0, min: -10, max: 5 },
-        { name: 'Option 2', value: 0, min: -10, max: 5 },
-      ],
-    },
-  ],
-}
+const initialState = {}
 
 const slice = createSlice({
   name: 'effects',
   initialState,
   reducers: {
-    toggle: (state, { payload: name }) => {
-      const effect = state.all.find(effect => effect.name === name)
+    toggle: (state, { payload: { audioSliceId, effectId } }) => {
+      const effect = state[audioSliceId][effectId]
       effect.enabled = !effect.enabled
     },
-    changeOption: (state, { payload: { value, effectName, optionName } }) => {
-      const option = state.all
-        .find(effect => effect.name === effectName)
-        .options.find(option => option.name === optionName)
-      option.value = value
+    changeOption: (
+      state,
+      { payload: { value, audioSliceId, effectId, optionId } },
+    ) => {
+      state[audioSliceId][effectId].options[optionId].value = value
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(audioSlicesActions.load, (state, { payload }) => {
+      payload.forEach(({ id }) => {
+        state[id] = structuredClone(allEffects)
+      })
+    })
   },
 })
 
 export const actions = slice.actions
-export const select = state => state.effects.all
+export const select = state => state.effects
 export default slice.reducer

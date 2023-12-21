@@ -14,3 +14,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.audioSlice[data-selected='true'] {
+  outline: var(--thikness-sm) solid var(--color-accent-bright);
+}

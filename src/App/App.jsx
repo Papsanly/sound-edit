@@ -4,8 +4,12 @@ import Controls from './Controls'
 import Tools from './Tools'
 import Timeline from './Timeline'
 import Effects from './Effects'
+import { useSelector } from 'react-redux'
+import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
 
 export default function App() {
+  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
+
   return (
     <div className={style.app}>
       <header className={style.header}>
@@ -15,7 +19,7 @@ export default function App() {
       </header>
       <div className={style.dragable} />
       <Timeline />
-      <Effects />
+      {selectedAudioSliceId && <Effects />}
     </div>
   )
 }

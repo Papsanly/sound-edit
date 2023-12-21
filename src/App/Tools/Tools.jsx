@@ -9,6 +9,7 @@ import { actions as appActions, select as selectApp } from '@/store/app.js'
 import { actions as audioSlicesActions } from '@/store/audioSlices.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { nanoid } from '@reduxjs/toolkit'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -17,7 +18,8 @@ export default function Tools() {
   useEffect(
     () =>
       window.electron.on('selected-file', filePaths => {
-        dispatch(audioSlicesActions.load(filePaths))
+        const payload = filePaths.map(filePath => ({ id: nanoid(), filePath }))
+        dispatch(audioSlicesActions.load(payload))
       }),
     [dispatch],
   )

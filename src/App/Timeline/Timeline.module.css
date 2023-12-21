@@ -5,3 +5,7 @@
   gap: var(--padding-sm);
   position: relative;
 }
+
+.timeline[data-audio-slice-selected='false'] {
+  grid-column: span 2;
+}

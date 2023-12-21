@@ -1,17 +1,18 @@
 import style from './Tracks.module.css'
 import AudioSlice from './AudioSlice'
 import CurrentTime from './CurrentTime'
-import { select } from '@/store/audioSlices.js'
-import { useSelector } from 'react-redux'
+import { select, actions } from '@/store/audioSlices.js'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Tracks() {
   const audioSlices = useSelector(select)
+  const dispatch = useDispatch()
 
   return (
-    <div className={style.tracks}>
+    <div className={style.tracks} onClick={() => dispatch(actions.deselect())}>
       <CurrentTime time={0} />
-      {audioSlices.map(audioSlice => (
-        <AudioSlice key={audioSlice.name} {...audioSlice} />
+      {Object.keys(audioSlices).map(id => (
+        <AudioSlice id={id} key={id} />
       ))}
     </div>
   )

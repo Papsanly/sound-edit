@@ -1,6 +1,5 @@
 .effects {
   display: flex;
   flex-direction: column;
-  width: var(--effects-width);
   gap: var(--padding-lg);
 }
