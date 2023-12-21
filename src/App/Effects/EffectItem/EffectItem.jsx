@@ -8,8 +8,7 @@ import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
 export default function EffectItem({ id }) {
   const dispatch = useDispatch()
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const effects = useSelector(selectEffects)
-  const effect = effects[selectedAudioSliceId][id]
+  const effect = useSelector(selectEffects)[selectedAudioSliceId][id]
 
   const onToggle = () => {
     dispatch(
