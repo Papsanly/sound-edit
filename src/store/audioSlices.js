@@ -6,9 +6,7 @@ const slice = createSlice({
   name: 'audioSlices',
   initialState,
   reducers: {
-    deselect: state => {
-      deselect(state)
-    },
+    deselect,
     select: (state, { payload: audioSliceId }) => {
       deselect(state)
       state[audioSliceId].selected = true

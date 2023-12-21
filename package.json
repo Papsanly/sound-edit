@@ -1,5 +1,7 @@
 {
   "name": "sound-edit",
+  "author": "Papsanly",
+  "description": "Software for editing audio with Electron + React",
   "main": "src/electron/main.cjs",
   "version": "0.1.0",
   "type": "module",
@@ -17,6 +19,10 @@
   "build": {
     "appId": "com.sound_edit",
     "productName": "Sound Edit",
+    "win": {
+      "target": "msi",
+      "icon": "public/favicon.ico"
+    },
     "directories": {
       "output": "electron-dist"
     },
