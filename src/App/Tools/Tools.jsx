@@ -5,27 +5,40 @@ import Select from '@/assets/Select.jsx'
 import Separator from '@/components/Separator'
 import Load from '@/assets/Load.jsx'
 import Save from '@/assets/Save.jsx'
-import { select, actions } from '@/store/app.js'
+import { actions as appActions, select as selectApp } from '@/store/app.js'
+import { actions as audioSlicesActions } from '@/store/audioSlices.js'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 export default function Tools() {
-  const app = useSelector(select)
+  const app = useSelector(selectApp)
   const dispatch = useDispatch()
+
+  useEffect(
+    () =>
+      window.electron.on('selected-file', filePaths => {
+        dispatch(audioSlicesActions.load(filePaths))
+      }),
+    [dispatch],
+  )
 
   return (
     <div className={style.tools}>
       <Button
         active={app.activeTool === 'select'}
         icon={<Select />}
-        onClick={() => dispatch(actions.setSelectTool())}
+        onClick={() => dispatch(appActions.setSelectTool())}
       />
       <Button
         active={app.activeTool === 'cut'}
         icon={<Cut />}
-        onClick={() => dispatch(actions.setCutTool())}
+        onClick={() => dispatch(appActions.setCutTool())}
       />
       <Separator vertical />
-      <Button icon={<Load />} />
+      <Button
+        icon={<Load />}
+        onClick={() => window.electron.send('open-file-dialog')}
+      />
       <Button icon={<Save />} />
     </div>
   )

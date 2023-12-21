@@ -7,6 +7,10 @@
 
 .name {
   position: absolute;
+  width: calc(100% - 2 * var(--padding-sm));
   bottom: var(--padding-sm);
   left: var(--padding-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

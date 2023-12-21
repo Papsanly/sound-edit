@@ -1,5 +1,9 @@
 const { app, BrowserWindow } = require('electron')
 const serve = require('electron-serve')
+const path = require('path')
+
+require('./openAudioFile.cjs')
+
 const loadURL = serve({ directory: 'dist' })
 
 let mainWindow
@@ -14,10 +18,13 @@ function createWindow() {
   }
 
   mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 750,
     backgroundColor: 'black',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
     show: false,
     frame: false,
@@ -28,7 +35,6 @@ function createWindow() {
       height: 34,
     },
   })
-  mainWindow.maximize()
 
   if (isDev()) {
     mainWindow.loadURL('http://localhost:5173/').then()

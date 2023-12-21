@@ -13,6 +13,7 @@ export default function App() {
         <Controls />
         <Tools />
       </header>
+      <div className={style.dragable} />
       <Timeline />
       <Effects />
     </div>
