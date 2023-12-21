@@ -13,12 +13,12 @@ const slice = createSlice({
     },
     load: (state, { payload }) => {
       const maxTrack = findMaxTrack(state)
-      payload.forEach(({ id, fileName }, i) => {
+      payload.forEach(({ id, fileName, length }, i) => {
         state[id] = {
           track: maxTrack + i,
           selected: false,
           start: 0,
-          length: 3,
+          length,
           name: fileName,
           isEditingName: false,
           editName: fileName,

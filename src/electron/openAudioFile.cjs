@@ -14,7 +14,10 @@ ipcMain.on('open-file-dialog', event => {
           result.filePaths.map(filePath => {
             const fileName = path.basename(filePath)
             const lastDotIndex = fileName.lastIndexOf('.')
-            return fileName.slice(0, lastDotIndex)
+            return {
+              fileName: fileName.slice(0, lastDotIndex),
+              length: 3,
+            }
           }),
         )
       }

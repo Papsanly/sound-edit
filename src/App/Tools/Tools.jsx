@@ -17,8 +17,8 @@ export default function Tools() {
 
   useEffect(
     () =>
-      window.electron.on('selected-file', fileNames => {
-        const payload = fileNames.map(fileName => ({ id: nanoid(), fileName }))
+      window.electron.on('selected-file', filesData => {
+        const payload = filesData.map(data => ({ id: nanoid(), ...data }))
         dispatch(audioSlicesActions.load(payload))
       }),
     [dispatch],
