@@ -1,4 +1,4 @@
-.item {
+.button {
   display: flex;
   padding: var(--padding-sm);
   border-radius: var(--round-md);
@@ -10,10 +10,10 @@ svg {
   fill: var(--color-icon-default);
 }
 
-.item[data-active='true'] {
+.button[data-active='true'] {
   background-color: var(--color-accent-variant);
 }
 
-.item[data-active='true'] svg {
+.button[data-active='true'] svg {
   fill: var(--color-icon-dark);
 }

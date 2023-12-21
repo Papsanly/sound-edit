@@ -24,6 +24,9 @@ const slice = createSlice({
         }
       })
     },
+    delete: (state, { payload: audioSliceId }) => {
+      delete state[audioSliceId]
+    },
     setName: (state, { payload: { audioSliceId, name } }) => {
       state[audioSliceId].name = name
     },

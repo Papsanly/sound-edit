@@ -1,16 +1,16 @@
 .audioSlice {
-  height: calc(var(--track-height) - 2 * var(--padding-sm));
   position: absolute;
+  height: calc(var(--track-height) - 2 * var(--padding-sm));
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
   border-radius: var(--round-md);
   background: var(--color-accent-default);
+  padding: var(--padding-sm);
 }
 
 .name,
 .editName {
-  position: absolute;
-  width: calc(100% - 2 * var(--padding-sm));
-  bottom: var(--padding-sm);
-  left: var(--padding-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -18,4 +18,9 @@
 
 .audioSlice[data-selected='true'] {
   outline: var(--thikness-sm) solid var(--color-accent-bright);
+}
+
+.deleteButton svg {
+  fill: var(--color-icon-bright);
+  height: var(--icon-size-sm);
 }

@@ -1,13 +1,20 @@
 import styles from './AudioSlice.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { select, actions } from '@/store/audioSlices.js'
+import {
+  select,
+  actions,
+  actions as audioSlicesActions,
+  selectSelectedAudioSliceId,
+} from '@/store/audioSlices.js'
 import { useEffect, useRef, useState } from 'react'
+import Delete from '@/assets/Delete.jsx'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
   const dispatch = useDispatch()
   const [editName, setEditName] = useState(audioSlice.name)
   const editNameInputRef = useRef(null)
+  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -47,6 +54,11 @@ export default function AudioSlice({ id }) {
     )
   }
 
+  const handleDeleteButtonClick = e => {
+    dispatch(audioSlicesActions.delete(id))
+    e.stopPropagation()
+  }
+
   const style = {
     left: `calc(${audioSlice.x}px + var(--padding-sm))`,
     width: `${audioSlice.width}px`,
@@ -74,6 +86,14 @@ export default function AudioSlice({ id }) {
         <p className={styles.name} onDoubleClick={handleNameDoubleClick}>
           {audioSlice.name}
         </p>
+      )}
+      {id === selectedAudioSliceId && (
+        <button
+          className={styles.deleteButton}
+          onClick={handleDeleteButtonClick}
+        >
+          <Delete />
+        </button>
       )}
     </div>
   )

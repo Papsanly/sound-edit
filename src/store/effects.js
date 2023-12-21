@@ -20,11 +20,18 @@ const slice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(audioSlicesActions.load, (state, { payload }) => {
-      payload.forEach(({ id }) => {
-        state[id] = structuredClone(allEffects)
+    builder
+      .addCase(audioSlicesActions.load, (state, { payload }) => {
+        payload.forEach(({ id }) => {
+          state[id] = structuredClone(allEffects)
+        })
       })
-    })
+      .addCase(
+        audioSlicesActions.delete,
+        (state, { payload: audioSliceId }) => {
+          delete state[audioSliceId]
+        },
+      )
   },
 })
 
