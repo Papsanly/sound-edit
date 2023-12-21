@@ -6,13 +6,12 @@ import {
   actions as audioSlicesActions,
   selectSelectedAudioSliceId,
 } from '@/store/audioSlices.js'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Delete from '@/assets/Delete.jsx'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
   const dispatch = useDispatch()
-  const [editName, setEditName] = useState(audioSlice.name)
   const editNameInputRef = useRef(null)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
 
@@ -28,30 +27,22 @@ export default function AudioSlice({ id }) {
   }
 
   const handleNameInputKeyUp = e => {
-    const value = e.target.value
     if (e.key === 'Enter') {
-      if (value.trim() === '') {
-        return
-      }
-
-      dispatch(
-        actions.setIsEditingName({ audioSliceId: id, isEditingName: false }),
-      )
-      dispatch(actions.setName({ audioSliceId: id, name: value }))
+      dispatch(actions.submitName(id))
     }
   }
 
   const handleNameInputChange = e => {
-    setEditName(e.target.value)
+    dispatch(
+      actions.setEditName({
+        audioSliceId: id,
+        value: e.target.value,
+      }),
+    )
   }
 
   const handleNameDoubleClick = () => {
-    dispatch(
-      actions.setIsEditingName({
-        audioSliceId: id,
-        isEditingName: true,
-      }),
-    )
+    dispatch(actions.startEditingName(id))
   }
 
   const handleDeleteButtonClick = e => {
@@ -78,7 +69,8 @@ export default function AudioSlice({ id }) {
           type={'text'}
           ref={editNameInputRef}
           className={styles.editName}
-          value={editName}
+          value={audioSlice.editName}
+          onClick={e => e.stopPropagation()}
           onKeyUp={handleNameInputKeyUp}
           onChange={handleNameInputChange}
         />

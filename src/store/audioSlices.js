@@ -13,25 +13,27 @@ const slice = createSlice({
     },
     load: (state, { payload }) => {
       const maxTrack = findMaxTrack(state)
-      payload.forEach(({ id, filePath }, i) => {
+      payload.forEach(({ id, fileName }, i) => {
         state[id] = {
           track: maxTrack + i,
           selected: false,
           x: 0,
           width: 300,
-          name: filePath,
+          name: fileName,
           isEditingName: false,
+          editName: fileName,
         }
       })
     },
     delete: (state, { payload: audioSliceId }) => {
       delete state[audioSliceId]
     },
-    setName: (state, { payload: { audioSliceId, name } }) => {
-      state[audioSliceId].name = name
+    submitName,
+    startEditingName: (state, { payload: audioSliceId }) => {
+      state[audioSliceId].isEditingName = true
     },
-    setIsEditingName: (state, { payload: { audioSliceId, isEditingName } }) => {
-      state[audioSliceId].isEditingName = isEditingName
+    setEditName: (state, { payload: { audioSliceId, value } }) => {
+      state[audioSliceId].editName = value
     },
   },
 })
@@ -52,11 +54,29 @@ function findMaxTrack(state) {
   return maxTrack === -Infinity ? 0 : maxTrack + 1
 }
 
+function submitName(state, { payload: audioSliceId, revertChanges = false }) {
+  const audioSlice = state[audioSliceId]
+  const editedName = audioSlice.editName.trim()
+
+  if (editedName === '') {
+    if (revertChanges) {
+      audioSlice.editName = audioSlice.name
+      audioSlice.isEditingName = false
+    }
+    return
+  }
+
+  audioSlice.name = audioSlice.editName
+  audioSlice.editName = editedName
+  audioSlice.isEditingName = false
+}
+
 function deselect(state) {
   const selectedAudioSliceId = getSelectedAudioSliceId(state)
   if (selectedAudioSliceId) {
-    state[selectedAudioSliceId].selected = false
-    state[selectedAudioSliceId].isEditingName = false
+    const selectedAudioSlice = state[selectedAudioSliceId]
+    selectedAudioSlice.selected = false
+    submitName(state, { payload: selectedAudioSliceId, revertChanges: true })
   }
 }
 
