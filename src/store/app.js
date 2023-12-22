@@ -4,7 +4,7 @@ const initialState = {
   activeTool: 'select',
   activeControl: 'pause',
   currentTime: 0,
-  scale: 100,
+  scale: 0.1,
 }
 
 const slice = createSlice({

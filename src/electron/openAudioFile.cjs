@@ -18,7 +18,7 @@ ipcMain.on('open-file-dialog', event => {
             return {
               id: nanoid(),
               fileName: fileName.slice(0, lastDotIndex),
-              length: 3,
+              length: 3000,
             }
           }),
         )

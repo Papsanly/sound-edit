@@ -37,8 +37,9 @@ export default function Tools() {
       />
       <Range
         value={app.scale}
-        min={10}
-        max={500}
+        min={0.001}
+        step={0.001}
+        max={1}
         name={'scale'}
         onChange={e => dispatch(appActions.setScale(e.target.value))}
       />

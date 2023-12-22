@@ -9,12 +9,14 @@ export default function Range({
   units,
   onChange,
   className,
+  step = 0.01,
 }) {
   const id = nanoid()
   return (
     <div className={style.rangeContainer}>
       <input
         id={id}
+        step={step}
         className={[style.range, className].join(' ')}
         type="range"
         value={value}
