@@ -5,6 +5,12 @@ export function findInObject(obj, predicate) {
   }
 }
 
+export function filterObjectByKey(obj, predicate) {
+  return Object.entries(obj)
+    .filter(([key]) => predicate(key))
+    .map(([, value]) => value)
+}
+
 export function findMax(state, predicate) {
   let maxTrack = Math.max(...Object.values(state).map(predicate))
   return maxTrack === -Infinity ? null : maxTrack

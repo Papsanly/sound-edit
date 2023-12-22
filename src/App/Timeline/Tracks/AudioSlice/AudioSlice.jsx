@@ -10,7 +10,7 @@ import { select as selectApp } from '@/store/app.js'
 import { useEffect, useRef, useState } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
-import { getCssProperty } from '@/lib/utils.js'
+import { filterObjectByKey, getCssProperty } from '@/lib/utils.js'
 
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(select)
@@ -77,9 +77,7 @@ export default function AudioSlice({ id }) {
     top: `calc(${Math.round(audioSlice.track)} * var(--track-height))`,
   }
 
-  const otherSlices = Object.entries(audioSlices)
-    .filter(([otherId]) => otherId !== id)
-    .map(([, otherSlice]) => otherSlice)
+  const otherSlices = filterObjectByKey(audioSlices, otherId => otherId !== id)
 
   const hasRightNeighbor =
     otherSlices.find(

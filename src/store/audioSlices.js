@@ -1,5 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
-import { findInObject, findMax } from '@/lib/utils.js'
+import { filterObjectByKey, findInObject, findMax } from '@/lib/utils.js'
 
 const initialState = {}
 
@@ -37,8 +37,10 @@ const slice = createSlice({
     moveEnd: (state, { payload: id }) => {
       const audioSlice = state[id]
 
-      for (const [otherId, otherSlice] of Object.entries(state)) {
-        if (id === otherId || !isIntersecting(audioSlice, otherSlice)) {
+      const otherSlices = filterObjectByKey(state, otherId => otherId !== id)
+
+      for (const otherSlice of otherSlices) {
+        if (!isIntersecting(audioSlice, otherSlice)) {
           continue
         }
 
@@ -53,6 +55,14 @@ const slice = createSlice({
         }
 
         if (intersection) break
+      }
+
+      if (audioSlice.start < 0) audioSlice.start = 0
+
+      while (
+        otherSlices.some(otherSlice => isIntersecting(audioSlice, otherSlice))
+      ) {
+        audioSlice.track += 1
       }
 
       audioSlice.track = Math.round(audioSlice.track)
