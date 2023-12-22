@@ -9,6 +9,25 @@
   padding: var(--padding-sm);
 }
 
+.verticalSpacer,
+.horizontalSpacer {
+  position: absolute;
+}
+
+.verticalSpacer {
+  top: 0;
+  left: 100%;
+  width: var(--padding-sm);
+  height: 100%;
+}
+
+.horizontalSpacer {
+  top: 100%;
+  left: 0;
+  height: var(--padding-sm);
+  width: 100%;
+}
+
 .name,
 .editName {
   white-space: nowrap;

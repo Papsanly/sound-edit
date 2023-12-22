@@ -4,6 +4,7 @@ const initialState = {
   activeTool: 'select',
   activeControl: 'pause',
   currentTime: 0,
+  scale: 100,
 }
 
 const slice = createSlice({
@@ -21,6 +22,9 @@ const slice = createSlice({
     },
     setCutTool: state => {
       state.activeTool = 'cut'
+    },
+    setScale: (state, { payload: scale }) => {
+      state.scale = scale
     },
   },
 })

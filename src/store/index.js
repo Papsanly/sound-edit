@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import effectsReducer from './effects.js'
 import appReducer from './app.js'
 import audioSlicesReducer from './audioSlices.js'
-import scrollReducer from './scroll.js'
 import storage from 'redux-persist/lib/storage'
 import {
   persistReducer,
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
   effects: effectsReducer,
   app: appReducer,
   audioSlices: audioSlicesReducer,
-  scroll: scrollReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

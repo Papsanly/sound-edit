@@ -8,6 +8,7 @@
   background: var(--color-background-dark)
     linear-gradient(var(--color-accent-variant), var(--color-accent-variant))
     no-repeat;
+  -webkit-app-region: no-drag;
 }
 
 .range::-webkit-slider-thumb {

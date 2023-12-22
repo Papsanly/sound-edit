@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { nanoid } from '@reduxjs/toolkit'
 import { select as selectAudioSlices } from '@/store/audioSlices.js'
+import Range from '@/components/Range/index.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -41,6 +42,13 @@ export default function Tools() {
         active={app.activeTool === 'cut'}
         icon={<Cut />}
         onClick={() => dispatch(appActions.setCutTool())}
+      />
+      <Range
+        value={app.scale}
+        min={10}
+        max={500}
+        name={'scale'}
+        onChange={e => dispatch(appActions.setScale(e.target.value))}
       />
       <Separator vertical />
       <Button

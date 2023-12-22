@@ -6,16 +6,16 @@ import {
   actions as audioSlicesActions,
   selectSelectedAudioSliceId,
 } from '@/store/audioSlices.js'
+import { select as selectApp } from '@/store/app.js'
 import { useEffect, useRef } from 'react'
 import Delete from '@/assets/Delete.jsx'
-import { select as selectScroll } from '@/store/scroll.js'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
+  const scale = useSelector(selectApp).scale
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const scroll = useSelector(selectScroll)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -53,11 +53,9 @@ export default function AudioSlice({ id }) {
   }
 
   const style = {
-    left: `calc(${
-      audioSlice.start * scroll.x.scale - scroll.x.offset
-    }px + var(--padding-sm))`,
-    width: `${audioSlice.length * scroll.x.scale}px`,
-    top: `calc(${audioSlice.track} * var(--track-height) - ${scroll.y.offset}px + var(--padding-sm))`,
+    left: `calc(${audioSlice.start * scale}px + var(--padding-sm))`,
+    width: `${audioSlice.length * scale}px`,
+    top: `calc(${audioSlice.track} * var(--track-height) + var(--padding-sm))`,
   }
 
   return (
@@ -68,6 +66,8 @@ export default function AudioSlice({ id }) {
       style={style}
       onClick={handleClick}
     >
+      <div className={styles.verticalSpacer} />
+      <div className={styles.horizontalSpacer} />
       {audioSlice.isEditingName ? (
         <input
           type={'text'}

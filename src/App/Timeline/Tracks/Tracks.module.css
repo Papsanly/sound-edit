@@ -1,5 +1,4 @@
 .tracks {
-  grid-row: 2;
   display: flex;
   flex: 1;
   position: relative;
@@ -11,5 +10,5 @@
   background-size: 100% calc(2 * var(--track-height));
   background-repeat: repeat;
   border-radius: var(--round-lg);
-  overflow: hidden;
+  overflow: scroll;
 }

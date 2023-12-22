@@ -6,6 +6,7 @@
   position: absolute;
   opacity: var(--current-time-opacity);
   top: var(--top);
+  height: calc(100% - var(--top) - var(--padding-sm));
   z-index: 10;
 }
 

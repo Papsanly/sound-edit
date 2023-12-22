@@ -32,3 +32,18 @@ input[type='text'] {
   border: none;
   background: none;
 }
+
+::-webkit-scrollbar {
+  width: var(--thikness-md);
+  height: var(--thikness-md);
+}
+
+::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  border-radius: var(--round-max);
+  background-color: var(--color-icon-default);
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}

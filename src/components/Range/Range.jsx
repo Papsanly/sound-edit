@@ -1,13 +1,21 @@
 import style from './Range.module.css'
 import { nanoid } from '@reduxjs/toolkit'
 
-export default function Range({ value, min, max, name, units, onChange }) {
+export default function Range({
+  value,
+  min,
+  max,
+  name,
+  units,
+  onChange,
+  className,
+}) {
   const id = nanoid()
   return (
     <div className={style.rangeContainer}>
       <input
         id={id}
-        className={style.range}
+        className={[style.range, className].join(' ')}
         type="range"
         value={value}
         min={min}
