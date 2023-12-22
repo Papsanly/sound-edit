@@ -1,5 +1,6 @@
 const { ipcMain, dialog } = require('electron')
 const path = require('path')
+const { nanoid } = require('@reduxjs/toolkit')
 
 ipcMain.on('open-file-dialog', event => {
   dialog
@@ -15,6 +16,7 @@ ipcMain.on('open-file-dialog', event => {
             const fileName = path.basename(filePath)
             const lastDotIndex = fileName.lastIndexOf('.')
             return {
+              id: nanoid(),
               fileName: fileName.slice(0, lastDotIndex),
               length: 3,
             }
