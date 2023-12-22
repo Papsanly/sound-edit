@@ -9,6 +9,22 @@
   padding: var(--padding-sm);
   margin-top: var(--padding-sm);
   margin-left: var(--padding-sm);
+  border-right: var(--thikness-sm) solid var(--color-accent-bright);
+  border-left: var(--thikness-sm) solid var(--color-accent-bright);
+}
+
+.audioSlice[data-has-neighbor-left='true'][data-selected='false'] {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.audioSlice[data-is-panning='true'] {
+  z-index: 5;
+}
+
+.audioSlice[data-has-neighbor-right='true'][data-selected='false'] {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .verticalSpacer,
@@ -38,7 +54,12 @@
 }
 
 .audioSlice[data-selected='true'] {
-  outline: var(--thikness-sm) solid var(--color-accent-bright);
+  border: var(--thikness-sm) solid var(--color-accent-bright);
+  margin-top: calc(var(--padding-sm) - var(--thikness-sm));
+  height: calc(
+    var(--track-height) - 2 * (var(--padding-sm) - var(--thikness-sm))
+  );
+  z-index: 5;
 }
 
 .deleteButton svg {

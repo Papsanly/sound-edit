@@ -27,14 +27,49 @@ const slice = createSlice({
         }
       })
     },
-    move: (state, { payload: { id, delta, scale, trackHeight } }) => {
+    move: (state, { payload: { id, info, scale, trackHeight } }) => {
       const audioSlice = state[id]
-
-      audioSlice.start = Math.max(audioSlice.start + delta.x / scale, 0)
-      audioSlice.track = Math.max(audioSlice.track + delta.y / trackHeight, 0)
+      let newStart = Math.max(audioSlice.start + info.delta.x / scale, 0)
+      let newTrack = Math.max(audioSlice.track + info.delta.y / trackHeight, 0)
+      audioSlice.start = newStart
+      audioSlice.track = newTrack
     },
     moveEnd: (state, { payload: id }) => {
-      state[id].track = Math.round(state[id].track)
+      const audioSlice = state[id]
+
+      for (const [otherId, otherSlice] of Object.entries(state)) {
+        if (
+          id === otherId ||
+          audioSlice.start > otherSlice.start + otherSlice.length ||
+          audioSlice.start + audioSlice.length < otherSlice.start ||
+          Math.round(otherSlice.track) !== Math.round(audioSlice.track)
+        ) {
+          continue
+        }
+
+        let intersection = ''
+
+        const centerDelta =
+          audioSlice.start +
+          audioSlice.length / 2 -
+          otherSlice.start -
+          otherSlice.length / 2
+
+        centerDelta < 0 ? (intersection = 'left') : (intersection = 'right')
+
+        switch (intersection) {
+          case 'left':
+            audioSlice.start = otherSlice.start - audioSlice.length
+            break
+          case 'right':
+            audioSlice.start = otherSlice.start + otherSlice.length
+            break
+        }
+
+        if (intersection) break
+      }
+
+      audioSlice.track = Math.round(audioSlice.track)
     },
     delete: (state, { payload: id }) => {
       delete state[id]

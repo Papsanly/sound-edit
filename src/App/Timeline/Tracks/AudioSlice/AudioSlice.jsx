@@ -7,17 +7,19 @@ import {
   selectSelectedAudioSliceId,
 } from '@/store/audioSlices.js'
 import { select as selectApp } from '@/store/app.js'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
 import { getCssProperty } from '@/lib/utils.js'
 
 export default function AudioSlice({ id }) {
-  const audioSlice = useSelector(select)[id]
+  const audioSlices = useSelector(select)
+  const audioSlice = audioSlices[id]
   const scale = useSelector(selectApp).scale
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
+  const [isPanning, setIsPanning] = useState(false)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -54,13 +56,19 @@ export default function AudioSlice({ id }) {
     e.stopPropagation()
   }
 
-  const handlePan = (_, { delta }) => {
+  const handlePan = (_, info) => {
+    setIsPanning(true)
     const trackHeight = parseInt(getCssProperty('--track-height'))
-    dispatch(audioSlicesActions.move({ id, delta, scale, trackHeight }))
+    dispatch(audioSlicesActions.move({ id, info, scale, trackHeight }))
   }
 
   const handlePanEnd = () => {
     dispatch(audioSlicesActions.moveEnd(id))
+    setIsPanning(false)
+  }
+
+  function handlePanStart() {
+    dispatch(audioSlicesActions.select(id))
   }
 
   const style = {
@@ -69,15 +77,37 @@ export default function AudioSlice({ id }) {
     top: `calc(${Math.round(audioSlice.track)} * var(--track-height))`,
   }
 
+  const otherSlices = Object.entries(audioSlices)
+    .filter(([otherId]) => otherId !== id)
+    .map(([, otherSlice]) => otherSlice)
+
+  const hasRightNeighbor =
+    otherSlices.find(
+      otherSlice =>
+        audioSlice.start + audioSlice.length === otherSlice.start &&
+        Math.round(otherSlice.track) === Math.round(audioSlice.track),
+    ) !== undefined
+
+  const hasLeftNeighbor =
+    otherSlices.find(
+      otherSlice =>
+        otherSlice.start + otherSlice.length === audioSlice.start &&
+        Math.round(otherSlice.track) === Math.round(audioSlice.track),
+    ) !== undefined
+
   return (
     <motion.div
       id={id}
       className={styles.audioSlice}
       data-selected={audioSlice.selected}
+      data-has-neighbor-left={hasLeftNeighbor}
+      data-has-neighbor-right={hasRightNeighbor}
+      data-is-panning={isPanning}
       style={style}
       onClick={handleClick}
       onPan={handlePan}
       onPanEnd={handlePanEnd}
+      onPanStart={handlePanStart}
     >
       <div className={styles.verticalSpacer} />
       <div className={styles.horizontalSpacer} />
