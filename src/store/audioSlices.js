@@ -38,25 +38,11 @@ const slice = createSlice({
       const audioSlice = state[id]
 
       for (const [otherId, otherSlice] of Object.entries(state)) {
-        if (
-          id === otherId ||
-          audioSlice.start > otherSlice.start + otherSlice.length ||
-          audioSlice.start + audioSlice.length < otherSlice.start ||
-          Math.round(otherSlice.track) !== Math.round(audioSlice.track)
-        ) {
+        if (id === otherId || !isIntersecting(audioSlice, otherSlice)) {
           continue
         }
 
-        let intersection = ''
-
-        const centerDelta =
-          audioSlice.start +
-          audioSlice.length / 2 -
-          otherSlice.start -
-          otherSlice.length / 2
-
-        centerDelta < 0 ? (intersection = 'left') : (intersection = 'right')
-
+        const intersection = intersect(audioSlice, otherSlice)
         switch (intersection) {
           case 'left':
             audioSlice.start = otherSlice.start - audioSlice.length
@@ -86,6 +72,25 @@ const slice = createSlice({
 
 function getSelectedAudioSliceId(audioSlices) {
   return findInObject(audioSlices, value => value.selected)
+}
+
+function isIntersecting(first, second) {
+  return (
+    first.start < second.start + second.length &&
+    first.start + first.length > second.start &&
+    Math.round(first.track) === Math.round(second.track)
+  )
+}
+
+function intersect(slice, obstacle) {
+  const centerDelta =
+    slice.start + slice.length / 2 - obstacle.start - obstacle.length / 2
+
+  if (centerDelta < 0) {
+    return 'left'
+  } else {
+    return 'right'
+  }
 }
 
 function submitName(state, { payload: id, revertChanges = false }) {
