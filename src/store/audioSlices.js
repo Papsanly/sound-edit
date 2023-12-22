@@ -27,11 +27,14 @@ const slice = createSlice({
         }
       })
     },
-    move: (state, { payload: { id, delta } }) => {
-      const start = state[id].start
-      let newStart = start + delta
-      if (newStart < 0) newStart = 0
-      state[id].start = newStart
+    move: (state, { payload: { id, delta, scale, trackHeight } }) => {
+      const audioSlice = state[id]
+
+      audioSlice.start = Math.max(audioSlice.start + delta.x / scale, 0)
+      audioSlice.track = Math.max(audioSlice.track + delta.y / trackHeight, 0)
+    },
+    moveEnd: (state, { payload: id }) => {
+      state[id].track = Math.round(state[id].track)
     },
     delete: (state, { payload: id }) => {
       delete state[id]

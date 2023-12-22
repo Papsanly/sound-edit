@@ -10,6 +10,7 @@ import { select as selectApp } from '@/store/app.js'
 import { useEffect, useRef } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
+import { getCssProperty } from '@/lib/utils.js'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
@@ -53,15 +54,19 @@ export default function AudioSlice({ id }) {
     e.stopPropagation()
   }
 
-  const handlePan = (e, { delta }) => {
-    dispatch(audioSlicesActions.move({ id, delta: delta.x / scale }))
-    console.log(delta)
+  const handlePan = (_, { delta }) => {
+    const trackHeight = parseInt(getCssProperty('--track-height'))
+    dispatch(audioSlicesActions.move({ id, delta, scale, trackHeight }))
+  }
+
+  const handlePanEnd = () => {
+    dispatch(audioSlicesActions.moveEnd(id))
   }
 
   const style = {
-    left: `calc(${audioSlice.start * scale}px + var(--padding-sm))`,
+    left: `calc(${audioSlice.start * scale}px)`,
     width: `${audioSlice.length * scale}px`,
-    top: `calc(${audioSlice.track} * var(--track-height) + var(--padding-sm))`,
+    top: `calc(${Math.round(audioSlice.track)} * var(--track-height))`,
   }
 
   return (
@@ -72,6 +77,7 @@ export default function AudioSlice({ id }) {
       style={style}
       onClick={handleClick}
       onPan={handlePan}
+      onPanEnd={handlePanEnd}
     >
       <div className={styles.verticalSpacer} />
       <div className={styles.horizontalSpacer} />

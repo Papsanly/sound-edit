@@ -13,3 +13,8 @@ export function findMax(state, predicate) {
 export function padWithLeadingZeros(num, totalLength) {
   return String(num).padStart(totalLength, '0')
 }
+
+export function getCssProperty(property) {
+  const rootStyle = getComputedStyle(document.documentElement)
+  return rootStyle.getPropertyValue(property)
+}
