@@ -1,7 +1,6 @@
 import style from './Contols.module.css'
 import Button from '../../components/Button'
-import Play from '@/assets/Play.jsx'
-import Pause from '@/assets/Pause.jsx'
+import { Play, Pause } from '@/assets'
 import { select, actions } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 

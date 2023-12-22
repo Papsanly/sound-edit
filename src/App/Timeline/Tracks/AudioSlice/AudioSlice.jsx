@@ -8,7 +8,7 @@ import {
 } from '@/store/audioSlices.js'
 import { select as selectApp } from '@/store/app.js'
 import { useEffect, useRef } from 'react'
-import Delete from '@/assets/Delete.jsx'
+import { Delete } from '@/assets'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
