@@ -14,7 +14,7 @@ const slice = createSlice({
     },
     load: (state, { payload }) => {
       const maxTrack = findMax(state, item => item.track)
-      const emptyTrack = maxTrack ? maxTrack + 1 : 0
+      const emptyTrack = maxTrack !== null ? maxTrack + 1 : 0
       payload.forEach(({ id, fileName, length }, i) => {
         state[id] = {
           track: emptyTrack + i,
@@ -27,15 +27,21 @@ const slice = createSlice({
         }
       })
     },
-    delete: (state, { payload: audioSliceId }) => {
-      delete state[audioSliceId]
+    move: (state, { payload: { id, delta } }) => {
+      const start = state[id].start
+      let newStart = start + delta
+      if (newStart < 0) newStart = 0
+      state[id].start = newStart
+    },
+    delete: (state, { payload: id }) => {
+      delete state[id]
     },
     submitName,
-    startEditingName: (state, { payload: audioSliceId }) => {
-      state[audioSliceId].isEditingName = true
+    startEditingName: (state, { payload: id }) => {
+      state[id].isEditingName = true
     },
-    setEditName: (state, { payload: { audioSliceId, value } }) => {
-      state[audioSliceId].editName = value
+    setEditName: (state, { payload: { audioSliceId: id, value } }) => {
+      state[id].editName = value
     },
   },
 })
@@ -44,8 +50,8 @@ function getSelectedAudioSliceId(audioSlices) {
   return findInObject(audioSlices, value => value.selected)
 }
 
-function submitName(state, { payload: audioSliceId, revertChanges = false }) {
-  const audioSlice = state[audioSliceId]
+function submitName(state, { payload: id, revertChanges = false }) {
+  const audioSlice = state[id]
   const editedName = audioSlice.editName.trim()
 
   if (editedName === '') {

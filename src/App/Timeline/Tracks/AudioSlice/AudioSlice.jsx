@@ -9,6 +9,7 @@ import {
 import { select as selectApp } from '@/store/app.js'
 import { useEffect, useRef } from 'react'
 import { Delete } from '@/assets'
+import { motion } from 'framer-motion'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
@@ -52,6 +53,11 @@ export default function AudioSlice({ id }) {
     e.stopPropagation()
   }
 
+  const handlePan = (e, { delta }) => {
+    dispatch(audioSlicesActions.move({ id, delta: delta.x / scale }))
+    console.log(delta)
+  }
+
   const style = {
     left: `calc(${audioSlice.start * scale}px + var(--padding-sm))`,
     width: `${audioSlice.length * scale}px`,
@@ -59,12 +65,13 @@ export default function AudioSlice({ id }) {
   }
 
   return (
-    <div
+    <motion.div
       id={id}
       className={styles.audioSlice}
       data-selected={audioSlice.selected}
       style={style}
       onClick={handleClick}
+      onPan={handlePan}
     >
       <div className={styles.verticalSpacer} />
       <div className={styles.horizontalSpacer} />
@@ -91,6 +98,6 @@ export default function AudioSlice({ id }) {
           <Delete />
         </button>
       )}
-    </div>
+    </motion.div>
   )
 }

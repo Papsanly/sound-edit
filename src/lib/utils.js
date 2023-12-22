@@ -10,6 +10,6 @@ export function findMax(state, predicate) {
   return maxTrack === -Infinity ? null : maxTrack
 }
 
-export function isEmptyObject(obj) {
-  return Object.keys(obj).length === 0
+export function padWithLeadingZeros(num, totalLength) {
+  return String(num).padStart(totalLength, '0')
 }
