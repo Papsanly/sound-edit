@@ -1,14 +1,11 @@
 .currentTime {
-  --top: calc(
-    -1 * var(--padding-sm) - (var(--icon-size-md) + var(--thikness-lg)) / 2
-  );
+  --top: calc((var(--thikness-lg) - var(--icon-size-md)) / 2);
   display: flex;
   flex-direction: column;
   align-items: center;
   position: absolute;
   opacity: var(--current-time-opacity);
   top: var(--top);
-  height: calc(100% - var(--padding-sm) - var(--top));
   z-index: 10;
 }
 

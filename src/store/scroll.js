@@ -1,18 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { actions as audioSlicesActions } from '@/store/audioSlices.js'
 
 const initialState = {
-  width: undefined,
-  height: undefined,
   x: {
     offset: 0,
-    scale: undefined,
+    scale: 100,
   },
   y: {
     offset: 0,
-    scale: getComputedStyle(document.documentElement).getPropertyValue(
-      '--track-height',
-    ),
   },
 }
 
@@ -26,11 +20,9 @@ const slice = createSlice({
     setHeight: (state, { payload: height }) => {
       state.height = height
     },
-  },
-  extraReducers: builder => {
-    builder.addCase(audioSlicesActions.load, state => {
-      state.x.scale = state.width / 3
-    })
+    setYScale: (state, { payload: scale }) => {
+      state.y.scale = scale
+    },
   },
 })
 

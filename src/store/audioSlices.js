@@ -1,4 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
+import { findInObject, findMax } from '@/lib/utils.js'
 
 const initialState = {}
 
@@ -12,10 +13,11 @@ const slice = createSlice({
       state[audioSliceId].selected = true
     },
     load: (state, { payload }) => {
-      const maxTrack = findMaxTrack(state)
+      const maxTrack = findMax(state, item => item.track)
+      const emptyTrack = maxTrack ? maxTrack + 1 : 0
       payload.forEach(({ id, fileName, length }, i) => {
         state[id] = {
-          track: maxTrack + i,
+          track: emptyTrack + i,
           selected: false,
           start: 0,
           length,
@@ -38,20 +40,8 @@ const slice = createSlice({
   },
 })
 
-function findInObject(obj, predicate) {
-  const res = Object.entries(obj).find(([, value]) => predicate(value))
-  if (res) {
-    return res[0]
-  }
-}
-
 function getSelectedAudioSliceId(audioSlices) {
   return findInObject(audioSlices, value => value.selected)
-}
-
-function findMaxTrack(state) {
-  let maxTrack = Math.max(...Object.values(state).map(item => item.track))
-  return maxTrack === -Infinity ? 0 : maxTrack + 1
 }
 
 function submitName(state, { payload: audioSliceId, revertChanges = false }) {

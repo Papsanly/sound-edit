@@ -10,18 +10,24 @@ import { actions as audioSlicesActions } from '@/store/audioSlices.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { nanoid } from '@reduxjs/toolkit'
+import { select as selectAudioSlices } from '@/store/audioSlices.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
   const dispatch = useDispatch()
+  const audioSlices = useSelector(selectAudioSlices)
 
   useEffect(
     () =>
       window.electron.on('selected-file', filesData => {
-        const payload = filesData.map(data => ({ id: nanoid(), ...data }))
+        const payload = filesData.map(fileData => ({
+          id: nanoid(),
+          ...fileData,
+        }))
         dispatch(audioSlicesActions.load(payload))
+        dispatch(audioSlicesActions.select(payload[0].id))
       }),
-    [dispatch],
+    [audioSlices, dispatch],
   )
 
   return (

@@ -8,12 +8,14 @@ import {
 } from '@/store/audioSlices.js'
 import { useEffect, useRef } from 'react'
 import Delete from '@/assets/Delete.jsx'
+import { select as selectScroll } from '@/store/scroll.js'
 
 export default function AudioSlice({ id }) {
   const audioSlice = useSelector(select)[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
+  const scroll = useSelector(selectScroll)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -51,9 +53,11 @@ export default function AudioSlice({ id }) {
   }
 
   const style = {
-    left: `calc(${audioSlice.x}px + var(--padding-sm))`,
-    width: `${audioSlice.width}px`,
-    top: `calc(${audioSlice.track} * var(--track-height) + var(--padding-sm))`,
+    left: `calc(${
+      audioSlice.start * scroll.x.scale - scroll.x.offset
+    }px + var(--padding-sm))`,
+    width: `${audioSlice.length * scroll.x.scale}px`,
+    top: `calc(${audioSlice.track} * var(--track-height) - ${scroll.y.offset}px + var(--padding-sm))`,
   }
 
   return (

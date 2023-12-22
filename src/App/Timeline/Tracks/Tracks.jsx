@@ -1,6 +1,5 @@
 import style from './Tracks.module.css'
 import AudioSlice from './AudioSlice'
-import CurrentTime from './CurrentTime'
 import {
   select as selectAudioSlices,
   actions as audioSlicesActions,
@@ -18,8 +17,10 @@ export default function Tracks() {
 
   const updateDimentions = useCallback(() => {
     const { width, height } = ref.current.getBoundingClientRect()
-    dispatch(scrollActions.setWidth(width))
-    dispatch(scrollActions.setHeight(height))
+    const rootStyle = getComputedStyle(document.documentElement)
+    const padding = parseInt(rootStyle.getPropertyValue('--padding-sm'))
+    dispatch(scrollActions.setWidth(width - 2 * padding))
+    dispatch(scrollActions.setHeight(height - 2 * padding))
   }, [dispatch])
 
   useEffect(() => {
@@ -30,14 +31,12 @@ export default function Tracks() {
   useEffect(() => {
     updateDimentions()
   }, [updateDimentions, selectedAudioSliceId, dispatch])
-
   return (
     <div
       ref={ref}
       className={style.tracks}
       onClick={() => dispatch(audioSlicesActions.deselect())}
     >
-      <CurrentTime time={0} />
       {Object.keys(audioSlices).map(id => (
         <AudioSlice id={id} key={id} />
       ))}
