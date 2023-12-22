@@ -8,7 +8,11 @@ export default function CurrentTime() {
   return (
     <div
       className={style.currentTime}
-      style={{ left: `${currentTime * scale}px` }}
+      style={{
+        left: `calc(${
+          currentTime * scale
+        }px + var(--padding-sm) - var(--icon-size-md) / 2)`,
+      }}
     >
       <div className={style.head} />
       <div className={style.bar} />
