@@ -11,24 +11,24 @@ const slice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    play: state => {
+    play(state) {
       state.activeControl = 'play'
     },
-    pause: state => {
+    pause(state) {
       state.activeControl = 'pause'
     },
-    setSelectTool: state => {
+    setSelectTool(state) {
       state.activeTool = 'select'
     },
-    setCutTool: state => {
+    setCutTool(state) {
       state.activeTool = 'cut'
     },
-    setScale: (state, { payload: scale }) => {
+    setScale(state, { payload: scale }) {
       state.scale = scale
     },
   },
 })
 
-export const actions = slice.actions
-export const select = state => state.app
+export const appActions = slice.actions
+export const selectApp = state => state.app
 export default slice.reducer

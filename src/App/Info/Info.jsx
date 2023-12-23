@@ -1,10 +1,10 @@
 import style from './Info.module.css'
 import { useSelector } from 'react-redux'
-import { select } from '@/store/app.js'
+import { selectApp } from '@/store/app.js'
 import { padWithLeadingZeros } from '@/lib/utils.js'
 
 export default function Info() {
-  const currentTime = useSelector(select).currentTime
+  const currentTime = useSelector(selectApp).currentTime
 
   const millis = padWithLeadingZeros(currentTime, 2)
   const seconds = padWithLeadingZeros(Math.round(currentTime / 1000), 2)

@@ -1,7 +1,7 @@
 import style from './EffectItem.module.css'
 import Range from '@/components/Range'
 import Toggle from '@/components/Toggle'
-import { actions, select as selectEffects } from '@/store/effects.js'
+import { effectsActions, selectEffects } from '@/store/effects.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
 
@@ -12,7 +12,7 @@ export default function EffectItem({ id }) {
 
   const onToggle = () => {
     dispatch(
-      actions.toggle({
+      effectsActions.toggle({
         audioSliceId: selectedAudioSliceId,
         effectId: id,
       }),
@@ -21,7 +21,7 @@ export default function EffectItem({ id }) {
 
   const onOptionChange = (value, optionId) => {
     dispatch(
-      actions.changeOption({
+      effectsActions.changeOption({
         value,
         audioSliceId: selectedAudioSliceId,
         effectId: id,

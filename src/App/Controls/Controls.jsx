@@ -1,11 +1,11 @@
 import style from './Contols.module.css'
 import Button from '../../components/Button'
 import { Play, Pause } from '@/assets'
-import { select, actions } from '@/store/app.js'
+import { selectApp, appActions } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Controls() {
-  const app = useSelector(select)
+  const app = useSelector(selectApp)
   const dispatch = useDispatch()
 
   return (
@@ -13,12 +13,12 @@ export default function Controls() {
       <Button
         active={app.activeControl === 'play'}
         icon={<Play />}
-        onClick={() => dispatch(actions.play())}
+        onClick={() => dispatch(appActions.play())}
       />
       <Button
         active={app.activeControl === 'pause'}
         icon={<Pause />}
-        onClick={() => dispatch(actions.pause())}
+        onClick={() => dispatch(appActions.pause())}
       />
     </div>
   )

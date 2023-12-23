@@ -1,6 +1,6 @@
 import style from './CurrentTime.module.css'
 import { useSelector } from 'react-redux'
-import { select as selectApp } from '@/store/app.js'
+import { selectApp } from '@/store/app.js'
 
 export default function CurrentTime() {
   const { currentTime, scale } = useSelector(selectApp)

@@ -1,25 +1,23 @@
 import styles from './AudioSlice.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  select,
-  actions,
-  actions as audioSlicesActions,
+  selectAudioSlices,
+  audioSlicesActions,
   selectSelectedAudioSliceId,
 } from '@/store/audioSlices.js'
-import { select as selectApp } from '@/store/app.js'
-import { useEffect, useRef, useState } from 'react'
+import { selectApp as selectApp } from '@/store/app.js'
+import { useEffect, useRef } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
 import { filterObjectByKey } from '@/lib/utils.js'
 
 export default function AudioSlice({ id }) {
-  const audioSlices = useSelector(select)
-  const audioSlice = audioSlices[id]
+  const audioSlices = useSelector(selectAudioSlices)
+  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
   const scale = useSelector(selectApp).scale
+  const audioSlice = audioSlices[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
-  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const [isPanning, setIsPanning] = useState(false)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -28,46 +26,40 @@ export default function AudioSlice({ id }) {
   }, [audioSlice.isEditingName])
 
   const handleClick = e => {
-    dispatch(actions.select(id))
+    dispatch(audioSlicesActions.select(id))
     e.stopPropagation()
   }
 
   const handleNameInputKeyUp = e => {
     if (e.key === 'Enter') {
-      dispatch(actions.submitName(id))
+      dispatch(audioSlicesActions.submitName(id))
     }
   }
 
   const handleNameInputChange = e => {
-    dispatch(
-      actions.setEditName({
-        audioSliceId: id,
-        value: e.target.value,
-      }),
-    )
+    dispatch(audioSlicesActions.setEditName({ id, value: e.target.value }))
   }
 
   const handleNameDoubleClick = () => {
-    dispatch(actions.startEditingName(id))
+    dispatch(audioSlicesActions.startEditingName(id))
   }
 
   const handleDeleteButtonClick = e => {
-    dispatch(audioSlicesActions.delete(id))
+    dispatch(audioSlicesActions.deleteSlice(id))
     e.stopPropagation()
   }
 
+  const handlePanStart = () => {
+    dispatch(audioSlicesActions.panStart(id))
+    dispatch(audioSlicesActions.select(id))
+  }
+
   const handlePan = (_, info) => {
-    dispatch(audioSlicesActions.move({ id, info, scale }))
+    dispatch(audioSlicesActions.pan({ id, info, scale }))
   }
 
   const handlePanEnd = () => {
-    setIsPanning(false)
-    dispatch(audioSlicesActions.moveEnd(id))
-  }
-
-  function handlePanStart() {
-    setIsPanning(true)
-    dispatch(audioSlicesActions.select(id))
+    dispatch(audioSlicesActions.panEnd(id))
   }
 
   const style = {
@@ -99,7 +91,7 @@ export default function AudioSlice({ id }) {
       data-selected={audioSlice.selected}
       data-has-neighbor-left={hasLeftNeighbor}
       data-has-neighbor-right={hasRightNeighbor}
-      data-is-panning={isPanning}
+      data-is-panning={audioSlice.isPanning}
       style={style}
       onClick={handleClick}
       onPan={handlePan}

@@ -1,9 +1,6 @@
 import style from './Tracks.module.css'
 import AudioSlice from './AudioSlice'
-import {
-  select as selectAudioSlices,
-  actions as audioSlicesActions,
-} from '@/store/audioSlices.js'
+import { selectAudioSlices, audioSlicesActions } from '@/store/audioSlices.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
 

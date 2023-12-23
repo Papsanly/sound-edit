@@ -1,25 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { actions as audioSlicesActions } from '@/store/audioSlices.js'
+import { audioSlicesActions as audioSlicesActions } from '@/store/audioSlices.js'
 import allEffects from '@/lib/effects.js'
 
-const initialState = {}
+function toggle(effects, { payload: { audioSliceId, effectId } }) {
+  const effect = effects[audioSliceId][effectId]
+  effect.enabled = !effect.enabled
+}
+
+function changeOption(
+  effects,
+  { payload: { value, audioSliceId, effectId, optionId } },
+) {
+  effects[audioSliceId][effectId].options[optionId].value = value
+}
 
 const slice = createSlice({
   name: 'effects',
-  initialState,
+  initialState: {},
   reducers: {
-    toggle: (state, { payload: { audioSliceId, effectId } }) => {
-      const effect = state[audioSliceId][effectId]
-      effect.enabled = !effect.enabled
-    },
-    changeOption: (
-      state,
-      { payload: { value, audioSliceId, effectId, optionId } },
-    ) => {
-      state[audioSliceId][effectId].options[optionId].value = value
-    },
+    toggle,
+    changeOption,
   },
-  extraReducers: builder => {
+  extraReducers(builder) {
     builder
       .addCase(audioSlicesActions.load, (state, { payload }) => {
         payload.forEach(({ id }) => {
@@ -27,7 +29,7 @@ const slice = createSlice({
         })
       })
       .addCase(
-        audioSlicesActions.delete,
+        audioSlicesActions.deleteSlice,
         (state, { payload: audioSliceId }) => {
           delete state[audioSliceId]
         },
@@ -35,6 +37,6 @@ const slice = createSlice({
   },
 })
 
-export const actions = slice.actions
-export const select = state => state.effects
+export const effectsActions = slice.actions
+export const selectEffects = state => state.effects
 export default slice.reducer
