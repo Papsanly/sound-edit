@@ -1,5 +1,10 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
-import { filterObjectByKey, findInObject, findMax } from '@/lib/utils.js'
+import {
+  filterObjectByKey,
+  findInObject,
+  findMax,
+  getCssProperty,
+} from '@/lib/utils.js'
 
 const initialState = {}
 
@@ -27,7 +32,8 @@ const slice = createSlice({
         }
       })
     },
-    move: (state, { payload: { id, info, scale, trackHeight } }) => {
+    move: (state, { payload: { id, info, scale } }) => {
+      const trackHeight = parseInt(getCssProperty('--track-height'))
       const audioSlice = state[id]
       let newStart = Math.max(audioSlice.start + info.delta.x / scale, 0)
       let newTrack = Math.max(audioSlice.track + info.delta.y / trackHeight, 0)
@@ -36,6 +42,7 @@ const slice = createSlice({
     },
     moveEnd: (state, { payload: id }) => {
       const audioSlice = state[id]
+      const prevStart = audioSlice.start
 
       const otherSlices = filterObjectByKey(state, otherId => otherId !== id)
 
@@ -63,6 +70,7 @@ const slice = createSlice({
         otherSlices.some(otherSlice => isIntersecting(audioSlice, otherSlice))
       ) {
         audioSlice.track += 1
+        audioSlice.start = prevStart
       }
 
       audioSlice.track = Math.round(audioSlice.track)
