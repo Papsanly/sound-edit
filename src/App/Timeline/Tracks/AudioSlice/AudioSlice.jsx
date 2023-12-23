@@ -51,7 +51,6 @@ export default function AudioSlice({ id }) {
 
   const handlePanStart = () => {
     dispatch(audioSlicesActions.panStart(id))
-    dispatch(audioSlicesActions.select(id))
   }
 
   const handlePan = (_, info) => {
@@ -60,6 +59,22 @@ export default function AudioSlice({ id }) {
 
   const handlePanEnd = () => {
     dispatch(audioSlicesActions.panEnd(id))
+  }
+
+  const handleTrimPanStart = () => {
+    dispatch(audioSlicesActions.trimStart(id))
+  }
+
+  const handleTrimLeftPan = (_, info) => {
+    dispatch(audioSlicesActions.trimLeft({ id, info, scale }))
+  }
+
+  const handleTrimRightPan = (_, info) => {
+    dispatch(audioSlicesActions.trimRight({ id, info, scale }))
+  }
+
+  const handleTrimEnd = () => {
+    dispatch(audioSlicesActions.trimEnd(id))
   }
 
   const style = {
@@ -94,12 +109,29 @@ export default function AudioSlice({ id }) {
       data-is-panning={audioSlice.isPanning}
       style={style}
       onClick={handleClick}
-      onPan={handlePan}
-      onPanEnd={handlePanEnd}
-      onPanStart={handlePanStart}
     >
+      <motion.div
+        className={styles.panner}
+        onPan={handlePan}
+        onPanEnd={handlePanEnd}
+        onPanStart={handlePanStart}
+      />
       <div className={styles.verticalSpacer} />
       <div className={styles.horizontalSpacer} />
+      <motion.div
+        onPointerDown={e => e.stopPropagation()}
+        onPanStart={handleTrimPanStart}
+        onPan={handleTrimLeftPan}
+        onPanEnd={handleTrimEnd}
+        className={styles.trimLeft}
+      />
+      <motion.div
+        onPointerDown={e => e.stopPropagation()}
+        onPanStart={handleTrimPanStart}
+        onPan={handleTrimRightPan}
+        onPanEnd={handleTrimEnd}
+        className={styles.trimRight}
+      />
       {audioSlice.isEditingName ? (
         <input
           type={'text'}

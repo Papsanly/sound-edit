@@ -66,3 +66,27 @@
   fill: var(--color-icon-bright);
   height: var(--icon-size-sm);
 }
+
+.trimLeft,
+.trimRight {
+  position: absolute;
+  height: 100%;
+  width: var(--thikness-md);
+  top: 0;
+  cursor: ew-resize;
+}
+
+.panner {
+  position: absolute;
+  inset: 0;
+}
+
+.trimLeft {
+  left: 0;
+  translate: -50% 0;
+}
+
+.trimRight {
+  right: 0;
+  translate: 50% 0;
+}

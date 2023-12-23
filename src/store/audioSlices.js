@@ -15,6 +15,8 @@ function isIntersecting(first, second) {
 }
 
 function intersect(slice, obstacle) {
+  if (!isIntersecting(slice, obstacle)) return
+
   const centerDelta =
     slice.start + slice.length / 2 - obstacle.start - obstacle.length / 2
 
@@ -33,6 +35,27 @@ function clampObstacle(slice, obstacle, intersection) {
     case 'right':
       slice.start = obstacle.start + obstacle.length
       break
+  }
+}
+
+function handleIntersection(audioSlices, id) {
+  const audioSlice = audioSlices[id]
+  const otherSlices = filterObjectByKey(audioSlices, otherId => otherId !== id)
+  const prevStart = audioSlice.start
+
+  for (const otherSlice of otherSlices) {
+    const intersection = intersect(audioSlice, otherSlice)
+    clampObstacle(audioSlice, otherSlice, intersection)
+    if (intersection) break
+  }
+
+  if (audioSlice.start < 0) audioSlice.start = 0
+
+  while (
+    otherSlices.some(otherSlice => isIntersecting(audioSlice, otherSlice))
+  ) {
+    audioSlice.track += 1
+    audioSlice.start = prevStart
   }
 }
 
@@ -83,16 +106,20 @@ function load(audioSlices, { payload }) {
       isEditingName: false,
       editName: fileName,
       isPanning: false,
-      isResizing: false,
+      isTriming: false,
     }
   })
 }
 
 function panStart(audioSlices, { payload: id }) {
+  if (audioSlices[id].isTriming) return
+  select(audioSlices, { payload: id })
   audioSlices[id].isPanning = true
 }
 
 function pan(audioSlices, { payload: { id, info, scale } }) {
+  if (audioSlices[id].isTriming) return
+
   const trackHeight = parseInt(getCssProperty('--track-height'))
   const audioSlice = audioSlices[id]
 
@@ -101,33 +128,13 @@ function pan(audioSlices, { payload: { id, info, scale } }) {
 }
 
 function panEnd(audioSlices, { payload: id }) {
+  if (audioSlices[id].isTriming) return
+
   select(audioSlices, { payload: id })
   const audioSlice = audioSlices[id]
-  const prevStart = audioSlice.start
   audioSlice.isPanning = false
 
-  const otherSlices = filterObjectByKey(audioSlices, otherId => otherId !== id)
-
-  for (const otherSlice of otherSlices) {
-    if (!isIntersecting(audioSlice, otherSlice)) {
-      continue
-    }
-
-    const intersection = intersect(audioSlice, otherSlice)
-    clampObstacle(audioSlice, otherSlice, intersection)
-
-    if (intersection) break
-  }
-
-  if (audioSlice.start < 0) audioSlice.start = 0
-
-  while (
-    otherSlices.some(otherSlice => isIntersecting(audioSlice, otherSlice))
-  ) {
-    audioSlice.track += 1
-    audioSlice.start = prevStart
-  }
-
+  handleIntersection(audioSlices, id)
   audioSlice.track = Math.round(audioSlice.track)
 }
 
@@ -147,6 +154,30 @@ export function selectSelectedAudioSliceId(state) {
   return findInObject(state.audioSlices, value => value.selected)
 }
 
+function trimStart(audioSlices, { payload: id }) {
+  audioSlices[id].isTriming = true
+  select(audioSlices, { payload: id })
+}
+
+function trimLeft(audioSlices, { payload: { id, info, scale } }) {
+  const audioSlice = audioSlices[id]
+  const newLength = audioSlice.length - info.delta.x / scale
+  audioSlice.length = Math.max(newLength, 0)
+  if (newLength >= 0) audioSlice.start += info.delta.x / scale
+}
+
+function trimRight(audioSlices, { payload: { id, info, scale } }) {
+  const audioSlice = audioSlices[id]
+  const newLength = audioSlice.length + info.delta.x / scale
+  audioSlice.length = Math.max(newLength, 0)
+}
+
+function trimEnd(audioSlices, { payload: id }) {
+  audioSlices[id].isTriming = false
+  select(audioSlices, { payload: id })
+  handleIntersection(audioSlices, id)
+}
+
 const slice = createSlice({
   name: 'audioSlices',
   initialState: {},
@@ -161,6 +192,10 @@ const slice = createSlice({
     submitName,
     startEditingName,
     setEditName,
+    trimStart,
+    trimLeft,
+    trimRight,
+    trimEnd,
   },
 })
 
