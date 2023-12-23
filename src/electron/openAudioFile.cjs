@@ -1,6 +1,6 @@
 const { ipcMain, dialog } = require('electron')
 const path = require('path')
-const { nanoid } = require('@reduxjs/toolkit')
+const crypto = require('crypto')
 
 ipcMain.on('open-file-dialog', event => {
   dialog
@@ -15,8 +15,9 @@ ipcMain.on('open-file-dialog', event => {
           result.filePaths.map(filePath => {
             const fileName = path.basename(filePath)
             const lastDotIndex = fileName.lastIndexOf('.')
+            const id = crypto.randomBytes(16).toString('hex')
             return {
-              id: nanoid(),
+              id,
               fileName: fileName.slice(0, lastDotIndex),
               length: 3000,
             }

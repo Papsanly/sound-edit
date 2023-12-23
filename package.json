@@ -28,7 +28,8 @@
     },
     "files": [
       "dist/**/*",
-      "src/electron/**/*"
+      "src/electron/**/*",
+      "node_modules/**/*"
     ]
   },
   "dependencies": {
