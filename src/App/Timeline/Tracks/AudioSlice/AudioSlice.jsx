@@ -6,7 +6,7 @@ import {
   selectSelectedAudioSliceId,
 } from '@/store/audioSlices.js'
 import { selectApp as selectApp } from '@/store/app.js'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
 import { filterObjectByKey } from '@/lib/utils.js'
@@ -14,10 +14,12 @@ import { filterObjectByKey } from '@/lib/utils.js'
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(selectAudioSlices)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const scale = useSelector(selectApp).scale
+  const { scale, activeTool } = useSelector(selectApp)
   const audioSlice = audioSlices[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
+  const [isHover, setIsHover] = useState(false)
+  const [mouseX, setMouseX] = useState(0)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -26,7 +28,16 @@ export default function AudioSlice({ id }) {
   }, [audioSlice.isEditingName])
 
   const handleClick = e => {
-    dispatch(audioSlicesActions.select(id))
+    if (activeTool === 'select') dispatch(audioSlicesActions.select(id))
+    else
+      dispatch(
+        audioSlicesActions.cut({
+          id,
+          x: mouseX,
+          scale,
+          newId: window.electron.generateId(),
+        }),
+      )
     e.stopPropagation()
   }
 
@@ -50,31 +61,43 @@ export default function AudioSlice({ id }) {
   }
 
   const handlePanStart = () => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.panStart(id))
   }
 
   const handlePan = (_, info) => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.pan({ id, info, scale }))
   }
 
   const handlePanEnd = () => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.panEnd(id))
   }
 
   const handleTrimPanStart = () => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.trimStart(id))
   }
 
   const handleTrimLeftPan = (_, info) => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.trimLeft({ id, info, scale }))
   }
 
   const handleTrimRightPan = (_, info) => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.trimRight({ id, info, scale }))
   }
 
   const handleTrimEnd = () => {
+    if (activeTool !== 'select') return
     dispatch(audioSlicesActions.trimEnd(id))
+  }
+
+  const handleMouseMove = e => {
+    const boundingRect = e.target.getBoundingClientRect()
+    setMouseX(e.clientX - boundingRect.x)
   }
 
   const style = {
@@ -108,8 +131,18 @@ export default function AudioSlice({ id }) {
       data-has-neighbor-right={hasRightNeighbor}
       data-is-panning={audioSlice.isPanning}
       style={style}
+      onMouseOver={() => setIsHover(true)}
+      onMouseOut={() => setIsHover(false)}
+      onMouseMove={handleMouseMove}
       onClick={handleClick}
     >
+      {activeTool === 'cut' && (
+        <div
+          data-is-hover={isHover}
+          className={styles.cutBar}
+          style={{ left: `${mouseX}px` }}
+        />
+      )}
       <motion.div
         className={styles.panner}
         onPan={handlePan}
@@ -119,14 +152,14 @@ export default function AudioSlice({ id }) {
       <div className={styles.verticalSpacer} />
       <div className={styles.horizontalSpacer} />
       <motion.div
-        onPointerDown={e => e.stopPropagation()}
+        data-active-tool={activeTool}
         onPanStart={handleTrimPanStart}
         onPan={handleTrimLeftPan}
         onPanEnd={handleTrimEnd}
         className={styles.trimLeft}
       />
       <motion.div
-        onPointerDown={e => e.stopPropagation()}
+        data-active-tool={activeTool}
         onPanStart={handleTrimPanStart}
         onPan={handleTrimRightPan}
         onPanEnd={handleTrimEnd}

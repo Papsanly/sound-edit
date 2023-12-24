@@ -34,6 +34,9 @@ const slice = createSlice({
           delete state[audioSliceId]
         },
       )
+      .addCase(audioSlicesActions.cut, (state, { payload: { id, newId } }) => {
+        state[newId] = JSON.parse(JSON.stringify(state[id]))
+      })
   },
 })
 

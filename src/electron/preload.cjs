@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron')
+const crypto = require('crypto')
 
 const electronHandler = {
   send(channel, ...args) {
@@ -11,6 +12,9 @@ const electronHandler = {
     return () => {
       ipcRenderer.removeListener(channel, subscription)
     }
+  },
+  generateId() {
+    return crypto.randomBytes(16).toString('hex')
   },
 }
 

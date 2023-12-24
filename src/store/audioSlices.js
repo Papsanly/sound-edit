@@ -178,6 +178,15 @@ function trimEnd(audioSlices, { payload: id }) {
   handleIntersection(audioSlices, id)
 }
 
+function cut(audioSlices, { payload: { id, x, scale, newId } }) {
+  const audioSlice = audioSlices[id]
+  const newAudioSlice = JSON.parse(JSON.stringify(audioSlice))
+  audioSlice.length = x / scale
+  newAudioSlice.start += audioSlice.length
+  newAudioSlice.length -= audioSlice.length
+  audioSlices[newId] = newAudioSlice
+}
+
 const slice = createSlice({
   name: 'audioSlices',
   initialState: {},
@@ -196,6 +205,7 @@ const slice = createSlice({
     trimLeft,
     trimRight,
     trimEnd,
+    cut,
   },
 })
 

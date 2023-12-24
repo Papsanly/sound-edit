@@ -73,6 +73,10 @@
   height: 100%;
   width: var(--thikness-md);
   top: 0;
+}
+
+.trimLeft[data-active-tool='select'],
+.trimRight[data-active-tool='select'] {
   cursor: ew-resize;
 }
 
@@ -89,4 +93,17 @@
 .trimRight {
   right: 0;
   translate: 50% 0;
+}
+
+.cutBar {
+  position: absolute;
+  height: 100%;
+  background: var(--color-accent-bright);
+  width: var(--thikness-sm);
+  top: 0;
+  translate: -50% 0;
+}
+
+.cutBar[data-is-hover='false'] {
+  display: none;
 }
