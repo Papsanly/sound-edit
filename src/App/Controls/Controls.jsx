@@ -34,7 +34,9 @@ export default function Controls() {
       <Button
         active={app.activeControl === 'play'}
         icon={<Play />}
-        onClick={() => dispatch(appActions.play())}
+        onClick={() => {
+          if (app.currentTime < endTime) dispatch(appActions.play())
+        }}
       />
       <Button
         active={app.activeControl === 'pause'}
