@@ -4,6 +4,14 @@
   flex-direction: column;
   gap: var(--padding-sm);
   position: relative;
+  overflow: hidden;
+  --top: calc((var(--thikness-lg) - var(--icon-size-md)) / 2);
+  margin-top: var(--top);
+  padding-top: calc(-1 * var(--top));
+  margin-left: calc(-1 * var(--icon-size-md) / 2);
+  padding-left: calc(var(--icon-size-md) / 2);
+  margin-right: calc(-1 * var(--icon-size-md) / 2);
+  padding-right: calc(var(--icon-size-md) / 2);
 }
 
 .timeline[data-audio-slice-selected='false'] {

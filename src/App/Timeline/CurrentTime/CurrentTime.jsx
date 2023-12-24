@@ -11,7 +11,7 @@ export default function CurrentTime() {
       style={{
         left: `calc(${Math.round(
           currentTime * scale - horizontalScroll,
-        )}px + var(--padding-sm) - var(--icon-size-md) / 2)`,
+        )}px + var(--padding-sm)`,
       }}
     >
       <div className={style.head} />
