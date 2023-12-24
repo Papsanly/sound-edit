@@ -65,6 +65,8 @@
 .deleteButton svg {
   fill: var(--color-icon-bright);
   height: var(--icon-size-sm);
+  position: relative;
+  z-index: 1;
 }
 
 .trimLeft,

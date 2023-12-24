@@ -20,6 +20,7 @@ export default function AudioSlice({ id }) {
   const editNameInputRef = useRef(null)
   const [isHover, setIsHover] = useState(false)
   const [mouseX, setMouseX] = useState(0)
+  const ref = useRef(null)
 
   useEffect(() => {
     if (audioSlice.isEditingName) {
@@ -96,7 +97,7 @@ export default function AudioSlice({ id }) {
   }
 
   const handleMouseMove = e => {
-    const boundingRect = e.target.getBoundingClientRect()
+    const boundingRect = ref.current.getBoundingClientRect()
     setMouseX(e.clientX - boundingRect.x)
   }
 
@@ -125,6 +126,7 @@ export default function AudioSlice({ id }) {
   return (
     <motion.div
       id={id}
+      ref={ref}
       className={styles.audioSlice}
       data-selected={audioSlice.selected}
       data-has-neighbor-left={hasLeftNeighbor}

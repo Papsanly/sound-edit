@@ -181,9 +181,10 @@ function trimEnd(audioSlices, { payload: id }) {
 function cut(audioSlices, { payload: { id, x, scale, newId } }) {
   const audioSlice = audioSlices[id]
   const newAudioSlice = JSON.parse(JSON.stringify(audioSlice))
-  audioSlice.length = x / scale
+  audioSlice.length = Math.round(x / scale)
   newAudioSlice.start += audioSlice.length
   newAudioSlice.length -= audioSlice.length
+  newAudioSlice.selected = false
   audioSlices[newId] = newAudioSlice
 }
 
