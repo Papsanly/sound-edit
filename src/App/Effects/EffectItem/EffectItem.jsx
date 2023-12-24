@@ -41,7 +41,7 @@ export default function EffectItem({ id }) {
           <Range
             key={option.name}
             {...option}
-            onChange={e => onOptionChange(e.target.value, optionId)}
+            onChange={e => onOptionChange(parseFloat(e.target.value), optionId)}
           />
         ))}
     </div>

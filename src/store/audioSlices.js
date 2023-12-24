@@ -150,10 +150,6 @@ function setEditName(audioSlices, { payload: { id, value } }) {
   audioSlices[id].editName = value
 }
 
-export function selectSelectedAudioSliceId(state) {
-  return findInObject(state.audioSlices, value => value.selected)
-}
-
 function trimStart(audioSlices, { payload: id }) {
   audioSlices[id].isTriming = true
   select(audioSlices, { payload: id })
@@ -209,6 +205,14 @@ const slice = createSlice({
     cut,
   },
 })
+
+export function selectSelectedAudioSliceId(state) {
+  return findInObject(state.audioSlices, value => value.selected)
+}
+
+export function selectEndTime(state) {
+  return findMax(state.audioSlices, value => value.start + value.length)
+}
 
 export const audioSlicesActions = slice.actions
 export const selectAudioSlices = state => state.audioSlices

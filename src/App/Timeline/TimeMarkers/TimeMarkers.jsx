@@ -14,7 +14,7 @@ export default function TimeMarkers() {
         value={currentTime}
         step={Math.round(1 / scale)}
         max={(horizontalScroll + width) / scale}
-        onChange={e => dispatch(appActions.setTime(e.target.value))}
+        onChange={e => dispatch(appActions.setTime(parseInt(e.target.value)))}
       />
     </div>
   )
