@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux'
 import { selectApp } from '@/store/app.js'
 
 export default function CurrentTime() {
-  const { currentTime, scale } = useSelector(selectApp)
+  const { currentTime, scale, horizontalScroll } = useSelector(selectApp)
 
   return (
     <div
       className={style.currentTime}
       style={{
-        left: `calc(${
-          currentTime * scale
-        }px + var(--padding-sm) - var(--icon-size-md) / 2)`,
+        left: `calc(${Math.round(
+          currentTime * scale - horizontalScroll,
+        )}px + var(--padding-sm) - var(--icon-size-md) / 2)`,
       }}
     >
       <div className={style.head} />

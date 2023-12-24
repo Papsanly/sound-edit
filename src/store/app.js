@@ -23,6 +23,15 @@ const slice = createSlice({
     setCutTool(state) {
       state.activeTool = 'cut'
     },
+    setTime(state, { payload: value }) {
+      state.currentTime = value
+    },
+    setWidth(state, { payload: value }) {
+      state.width = value
+    },
+    setHorizontalScroll(state, { payload: value }) {
+      state.horizontalScroll = value
+    },
     setScale(state, { payload: scale }) {
       state.scale = scale
     },
