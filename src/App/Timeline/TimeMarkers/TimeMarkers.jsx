@@ -11,11 +11,11 @@ export default function TimeMarkers() {
   return (
     <div className={style.timeMarkers}>
       <input
-        min={horizontalScroll / scale}
+        min={horizontalScroll / scale || 0}
         type={'range'}
         value={currentTime}
         step={Math.round(1 / scale)}
-        max={(horizontalScroll + width) / scale}
+        max={(horizontalScroll + width) / scale || 0}
         onChange={e =>
           dispatch(
             appActions.setTime(Math.min(parseInt(e.target.value), endTime)),
