@@ -122,8 +122,9 @@ function pan(audioSlices, { payload: { id, info, scale } }) {
 
   const trackHeight = parseInt(getCssProperty('--track-height'))
   const audioSlice = audioSlices[id]
+  const delta = Math.round(info.delta.x / scale)
 
-  audioSlice.start = Math.max(audioSlice.start + info.delta.x / scale, 0)
+  audioSlice.start = Math.max(audioSlice.start + delta, 0)
   audioSlice.track = Math.max(audioSlice.track + info.delta.y / trackHeight, 0)
 }
 
@@ -157,14 +158,16 @@ function trimStart(audioSlices, { payload: id }) {
 
 function trimLeft(audioSlices, { payload: { id, info, scale } }) {
   const audioSlice = audioSlices[id]
-  const newLength = audioSlice.length - info.delta.x / scale
+  const delta = Math.round(info.delta.x / scale)
+  const newLength = audioSlice.length - delta
   audioSlice.length = Math.max(newLength, 0)
-  if (newLength >= 0) audioSlice.start += info.delta.x / scale
+  if (newLength >= 0) audioSlice.start += delta
 }
 
 function trimRight(audioSlices, { payload: { id, info, scale } }) {
   const audioSlice = audioSlices[id]
-  const newLength = audioSlice.length + info.delta.x / scale
+  const delta = Math.round(info.delta.x / scale)
+  const newLength = audioSlice.length + delta
   audioSlice.length = Math.max(newLength, 0)
 }
 

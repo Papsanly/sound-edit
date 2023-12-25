@@ -26,9 +26,6 @@ const slice = createSlice({
     setTime(state, { payload: value }) {
       state.currentTime = value
     },
-    updateTime(state, { payload: value }) {
-      state.currentTime += value
-    },
     setWidth(state, { payload: value }) {
       state.width = value
     },

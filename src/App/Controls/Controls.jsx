@@ -5,6 +5,7 @@ import { selectApp, appActions } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef } from 'react'
 import { selectEndTime } from '@/store/audioSlices.js'
+import * as Tone from 'tone'
 
 export default function Controls() {
   const app = useSelector(selectApp)
@@ -14,10 +15,12 @@ export default function Controls() {
 
   useEffect(() => {
     if (app.activeControl === 'play') {
-      interval.current = setInterval(
-        () => dispatch(appActions.updateTime(10)),
-        10,
-      )
+      const now = Tone.now()
+      const prevTime = app.currentTime
+      interval.current = setInterval(() => {
+        const newTime = prevTime + Math.round(1000 * (Tone.now() - now))
+        dispatch(appActions.setTime(newTime))
+      }, 10)
     } else {
       clearInterval(interval.current)
     }
