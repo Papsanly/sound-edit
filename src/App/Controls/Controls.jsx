@@ -14,22 +14,10 @@ export default function Controls() {
   let interval = useRef(null)
 
   useEffect(() => {
-    if (app.activeControl === 'play') {
-      const now = Tone.now()
-      const prevTime = app.currentTime
-      interval.current = setInterval(() => {
-        const newTime = prevTime + Math.round(1000 * (Tone.now() - now))
-        dispatch(appActions.setTime(newTime))
-      }, 10)
-    } else {
+    if (app.currentTime >= endTime) {
+      dispatch(appActions.pause())
       clearInterval(interval.current)
     }
-
-    return () => clearInterval(interval.current)
-  }, [dispatch, app.activeControl])
-
-  useEffect(() => {
-    if (app.currentTime >= endTime) dispatch(appActions.pause())
   }, [dispatch, endTime, app.currentTime])
 
   return (
@@ -38,13 +26,24 @@ export default function Controls() {
         active={app.activeControl === 'play'}
         icon={<Play />}
         onClick={() => {
-          if (app.currentTime < endTime) dispatch(appActions.play())
+          if (app.currentTime < endTime) {
+            dispatch(appActions.play())
+            const now = Tone.now()
+            const prevTime = app.currentTime
+            interval.current = setInterval(() => {
+              const newTime = prevTime + Math.round(1000 * (Tone.now() - now))
+              dispatch(appActions.setTime(newTime))
+            }, 10)
+          }
         }}
       />
       <Button
         active={app.activeControl === 'pause'}
         icon={<Pause />}
-        onClick={() => dispatch(appActions.pause())}
+        onClick={() => {
+          dispatch(appActions.pause())
+          clearInterval(interval.current)
+        }}
       />
     </div>
   )
