@@ -35,7 +35,7 @@ ipcMain.on('open-file-dialog', event => {
     })
     .then(result => {
       if (result.canceled) {
-        return
+        event.sender.send('open-file-canceled')
       }
       result.filePaths.map(filePath => {
         const id = crypto.randomBytes(8).toString('hex')

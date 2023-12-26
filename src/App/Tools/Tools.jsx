@@ -34,9 +34,14 @@ export default function Tools() {
       },
     )
 
+    const unsubOpenFileCanceled = window.electron.on('open-file-canceled', () =>
+      dispatch(appActions.setLoading(false)),
+    )
+
     return () => {
       unsubLoadedFile()
       unsubSelectedFile()
+      unsubOpenFileCanceled()
     }
   }, [dispatch])
 
