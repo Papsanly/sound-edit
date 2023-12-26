@@ -96,7 +96,7 @@ function select(audioSlices, { payload: id }) {
   audioSlices[id].selected = true
 }
 
-function load(audioSlices, { payload: { id, file, player } }) {
+function load(audioSlices, { payload: { id, name, path, player } }) {
   const maxTrack = findMax(audioSlices, item => item.track)
   const emptyTrack = maxTrack !== null ? maxTrack + 1 : 0
 
@@ -109,10 +109,10 @@ function load(audioSlices, { payload: { id, file, player } }) {
     trimLeft: 0,
     trimRight: length,
     length,
-    name: file.name,
-    path: file.path,
+    name,
+    path,
     isEditingName: false,
-    editName: file.name,
+    editName: name,
     isPanning: false,
     isTriming: false,
   }

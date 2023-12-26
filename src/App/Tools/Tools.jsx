@@ -4,29 +4,24 @@ import Separator from '@/components/Separator'
 import { Cut, Select, Load, Save } from '@/assets'
 import { appActions, selectApp } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRef } from 'react'
+import { useEffect } from 'react'
 import Range from '@/components/Range'
 import * as Tone from 'tone'
-import { readFileAsync } from '@/lib/utils.js'
 import { audioSlicesActions } from '@/store/audioSlices.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
   const dispatch = useDispatch()
-  const fileInputRef = useRef(null)
 
-  const handleFileInput = async e => {
-    await Tone.start()
-    const reader = new FileReader()
-    for (const file of e.target.files) {
-      const url = await readFileAsync(reader, file)
-      const id = window.electron.generateId()
+  useEffect(() => {
+    const loadPlayer = ({ id, name, path, url }) => {
       const player = new Tone.Player(url, () => {
-        dispatch(audioSlicesActions.load({ id, file, player }))
+        dispatch(audioSlicesActions.load({ id, name, path, player }))
       }).toDestination()
     }
-    e.target.value = ''
-  }
+
+    return window.electron.on('selected-file', loadPlayer)
+  }, [dispatch])
 
   return (
     <div className={style.tools}>
@@ -50,14 +45,9 @@ export default function Tools() {
         onChange={e => dispatch(appActions.setScale(e.target.value))}
       />
       <Separator vertical />
-      <Button icon={<Load />} onClick={() => fileInputRef.current.click()} />
-      <input
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        type={'file'}
-        multiple
-        accept={'audio/*'}
-        onChange={handleFileInput}
+      <Button
+        icon={<Load />}
+        onClick={() => window.electron.send('open-file-dialog')}
       />
       <Button icon={<Save />} />
     </div>
