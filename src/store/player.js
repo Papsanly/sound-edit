@@ -2,11 +2,17 @@ import { createSlice } from '@reduxjs/toolkit'
 import { audioSlicesActions } from '@/store/audioSlices.js'
 import { appActions } from '@/store/app.js'
 import * as Tone from 'tone'
+import { REHYDRATE } from 'redux-persist'
 
 const slice = createSlice({
   name: 'player',
   initialState: {},
-  reducers: {},
+  reducers: {
+    load(state, { payload: { id, player } }) {
+      state[id] = player
+      console.log('Loaded ', id)
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(
@@ -48,10 +54,21 @@ const slice = createSlice({
         Tone.Transport.stop()
         for (const id in state) {
           state[id].stop()
-          console.log(`stoping ${id}`)
         }
       })
+      .addCase(
+        /** @type {import('@reduxjs/toolkit').TypedActionCreator} */ REHYDRATE,
+        (state, action) => {
+          if (action.payload) {
+            const audioSlices = action.payload.audioSlices
+            for (const id in audioSlices) {
+              window.electron.send('load-file', id, audioSlices[id].path)
+            }
+          }
+        },
+      )
   },
 })
 
+export const playerActions = slice.actions
 export default slice.reducer

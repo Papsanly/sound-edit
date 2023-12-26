@@ -8,19 +8,32 @@ import { useEffect } from 'react'
 import Range from '@/components/Range'
 import * as Tone from 'tone'
 import { audioSlicesActions } from '@/store/audioSlices.js'
+import { playerActions } from '@/store/player.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const loadPlayer = ({ id, name, path, url }) => {
+    const unsubLoadedFile = window.electron.on('loaded-file', ({ id, url }) => {
       const player = new Tone.Player(url, () => {
-        dispatch(audioSlicesActions.load({ id, name, path, player }))
+        dispatch(playerActions.load({ id, player }))
       }).toDestination()
-    }
+    })
 
-    return window.electron.on('selected-file', loadPlayer)
+    const unsubSelectedFile = window.electron.on(
+      'selected-file',
+      ({ id, name, path, url }) => {
+        const player = new Tone.Player(url, () => {
+          dispatch(audioSlicesActions.load({ id, name, path, player }))
+        }).toDestination()
+      },
+    )
+
+    return () => {
+      unsubLoadedFile()
+      unsubSelectedFile()
+    }
   }, [dispatch])
 
   return (

@@ -42,6 +42,7 @@ export default configureStore({
           PURGE,
           REGISTER,
           'audioSlices/load',
+          'player/load',
         ],
         ignoredPaths: ['player'],
       },
