@@ -18,3 +18,10 @@
 .dragable {
   -webkit-app-region: drag;
 }
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  background: #fff3;
+  z-index: 12;
+}

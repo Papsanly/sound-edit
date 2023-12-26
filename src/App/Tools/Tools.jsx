@@ -16,7 +16,9 @@ export default function Tools() {
 
   useEffect(() => {
     const unsubLoadedFile = window.electron.on('loaded-file', ({ id, url }) => {
+      dispatch(appActions.setLoading(true))
       const player = new Tone.Player(url, () => {
+        dispatch(appActions.setLoading(false))
         dispatch(playerActions.load({ id, player }))
       }).toDestination()
     })
@@ -24,7 +26,9 @@ export default function Tools() {
     const unsubSelectedFile = window.electron.on(
       'selected-file',
       ({ id, name, path, url }) => {
+        dispatch(appActions.setLoading(true))
         const player = new Tone.Player(url, () => {
+          dispatch(appActions.setLoading(false))
           dispatch(audioSlicesActions.load({ id, name, path, player }))
         }).toDestination()
       },
@@ -60,7 +64,10 @@ export default function Tools() {
       <Separator vertical />
       <Button
         icon={<Load />}
-        onClick={() => window.electron.send('open-file-dialog')}
+        onClick={() => {
+          dispatch(appActions.setLoading(true))
+          window.electron.send('open-file-dialog')
+        }}
       />
       <Button icon={<Save />} />
     </div>

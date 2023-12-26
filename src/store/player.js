@@ -10,7 +10,6 @@ const slice = createSlice({
   reducers: {
     load(state, { payload: { id, player } }) {
       state[id] = player
-      console.log('Loaded ', id)
     },
   },
   extraReducers(builder) {
@@ -56,17 +55,13 @@ const slice = createSlice({
           state[id].stop()
         }
       })
-      .addCase(
-        /** @type {import('@reduxjs/toolkit').TypedActionCreator} */ REHYDRATE,
-        (state, action) => {
-          if (action.payload) {
-            const audioSlices = action.payload.audioSlices
-            for (const id in audioSlices) {
-              window.electron.send('load-file', id, audioSlices[id].path)
-            }
-          }
-        },
-      )
+      .addCase(REHYDRATE, (state, action) => {
+        if (action.payload) {
+          const audioSlices = action.payload.audioSlices
+          for (const id in audioSlices)
+            window.electron.send('load-file', id, audioSlices[id].path)
+        }
+      })
   },
 })
 

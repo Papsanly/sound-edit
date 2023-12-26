@@ -4,13 +4,17 @@ const initialState = {
   activeTool: 'select',
   activeControl: 'pause',
   currentTime: 0,
-  scale: 0.005,
+  scale: 0.01,
+  isLoading: false,
 }
 
 const slice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    setLoading(state, { payload: value }) {
+      state.isLoading = value
+    },
     play(state) {
       state.activeControl = 'play'
     },
