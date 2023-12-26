@@ -7,6 +7,7 @@
   top: 0;
   height: calc(100% - var(--padding-sm));
   z-index: 10;
+  pointer-events: none;
 }
 
 .head {
@@ -24,4 +25,5 @@
   width: var(--thikness-sm);
   border-radius: var(--round-max);
   background: var(--current-time-color);
+  pointer-events: none;
 }

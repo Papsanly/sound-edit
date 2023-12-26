@@ -14,7 +14,7 @@ import { filterObjectByKey } from '@/lib/utils.js'
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(selectAudioSlices)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const { scale, activeTool } = useSelector(selectApp)
+  const { scale, activeTool, activeControl } = useSelector(selectApp)
   const audioSlice = audioSlices[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
@@ -57,7 +57,7 @@ export default function AudioSlice({ id }) {
   }
 
   const handleDeleteButtonClick = e => {
-    dispatch(audioSlicesActions.deleteSlice(id))
+    if (activeControl !== 'play') dispatch(audioSlicesActions.deleteSlice(id))
     e.stopPropagation()
   }
 
@@ -103,7 +103,7 @@ export default function AudioSlice({ id }) {
 
   const style = {
     left: `calc(${audioSlice.start * scale}px)`,
-    width: `${audioSlice.length * scale}px`,
+    width: `${(audioSlice.trimRight - audioSlice.trimLeft) * scale}px`,
     top: `calc(${Math.round(audioSlice.track)} * var(--track-height))`,
   }
 
@@ -112,14 +112,16 @@ export default function AudioSlice({ id }) {
   const hasRightNeighbor =
     otherSlices.find(
       otherSlice =>
-        audioSlice.start + audioSlice.length === otherSlice.start &&
+        audioSlice.start + audioSlice.trimRight - audioSlice.trimLeft ===
+          otherSlice.start &&
         Math.round(otherSlice.track) === Math.round(audioSlice.track),
     ) !== undefined
 
   const hasLeftNeighbor =
     otherSlices.find(
       otherSlice =>
-        otherSlice.start + otherSlice.length === audioSlice.start &&
+        otherSlice.start + otherSlice.trimRight - otherSlice.trimLeft ===
+          audioSlice.start &&
         Math.round(otherSlice.track) === Math.round(audioSlice.track),
     ) !== undefined
 

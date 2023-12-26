@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { audioSlicesActions as audioSlicesActions } from '@/store/audioSlices.js'
+import { audioSlicesActions } from '@/store/audioSlices.js'
 import allEffects from '@/lib/effects.js'
 
 function toggle(effects, { payload: { audioSliceId, effectId } }) {
@@ -23,17 +23,12 @@ const slice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(audioSlicesActions.load, (state, { payload }) => {
-        payload.forEach(({ id }) => {
-          state[id] = structuredClone(allEffects)
-        })
+      .addCase(audioSlicesActions.load, (state, { payload: { id } }) => {
+        state[id] = structuredClone(allEffects)
       })
-      .addCase(
-        audioSlicesActions.deleteSlice,
-        (state, { payload: audioSliceId }) => {
-          delete state[audioSliceId]
-        },
-      )
+      .addCase(audioSlicesActions.deleteSlice, (state, { payload: id }) => {
+        delete state[id]
+      })
       .addCase(audioSlicesActions.cut, (state, { payload: { id, newId } }) => {
         state[newId] = JSON.parse(JSON.stringify(state[id]))
       })

@@ -2,8 +2,6 @@ const { app, BrowserWindow } = require('electron')
 const serve = require('electron-serve')
 const path = require('path')
 
-require('./openAudioFile.cjs')
-
 const loadURL = serve({ directory: 'dist' })
 
 let mainWindow

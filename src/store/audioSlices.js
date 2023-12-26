@@ -8,8 +8,8 @@ import {
 
 function isIntersecting(first, second) {
   return (
-    first.start < second.start + second.length &&
-    first.start + first.length > second.start &&
+    first.start < second.start + second.trimRight - second.trimLeft &&
+    first.start + first.trimRight - first.trimLeft > second.start &&
     Math.round(first.track) === Math.round(second.track)
   )
 }
@@ -18,7 +18,10 @@ function intersect(slice, obstacle) {
   if (!isIntersecting(slice, obstacle)) return
 
   const centerDelta =
-    slice.start + slice.length / 2 - obstacle.start - obstacle.length / 2
+    slice.start +
+    (slice.trimRight - slice.trimLeft) / 2 -
+    obstacle.start -
+    (obstacle.trimRight - obstacle.trimLeft) / 2
 
   if (centerDelta < 0) {
     return 'left'
@@ -30,10 +33,10 @@ function intersect(slice, obstacle) {
 function clampObstacle(slice, obstacle, intersection) {
   switch (intersection) {
     case 'left':
-      slice.start = obstacle.start - slice.length
+      slice.start = obstacle.start - slice.trimRight + slice.trimLeft
       break
     case 'right':
-      slice.start = obstacle.start + obstacle.length
+      slice.start = obstacle.start + obstacle.trimRight - obstacle.trimLeft
       break
   }
 }
@@ -93,22 +96,28 @@ function select(audioSlices, { payload: id }) {
   audioSlices[id].selected = true
 }
 
-function load(audioSlices, { payload }) {
+function load(audioSlices, { payload: { id, file, player } }) {
   const maxTrack = findMax(audioSlices, item => item.track)
   const emptyTrack = maxTrack !== null ? maxTrack + 1 : 0
-  payload.forEach(({ id, fileName, length }, i) => {
-    audioSlices[id] = {
-      track: emptyTrack + i,
-      selected: false,
-      start: 0,
-      length,
-      name: fileName,
-      isEditingName: false,
-      editName: fileName,
-      isPanning: false,
-      isTriming: false,
-    }
-  })
+
+  const length = Math.round(1000 * player.buffer.duration)
+
+  audioSlices[id] = {
+    track: emptyTrack,
+    selected: false,
+    start: 0,
+    trimLeft: 0,
+    trimRight: length,
+    length,
+    name: file.name,
+    path: file.path,
+    isEditingName: false,
+    editName: file.name,
+    isPanning: false,
+    isTriming: false,
+  }
+
+  select(audioSlices, { payload: id })
 }
 
 function panStart(audioSlices, { payload: id }) {
@@ -159,16 +168,26 @@ function trimStart(audioSlices, { payload: id }) {
 function trimLeft(audioSlices, { payload: { id, info, scale } }) {
   const audioSlice = audioSlices[id]
   const delta = Math.round(info.delta.x / scale)
-  const newLength = audioSlice.length - delta
-  audioSlice.length = Math.max(newLength, 0)
-  if (newLength >= 0) audioSlice.start += delta
+
+  const newTrimLeft = Math.min(
+    audioSlice.trimRight,
+    Math.max(audioSlice.trimLeft + delta, 0),
+  )
+  const prevTrimLeft = audioSlice.trimLeft
+  const trimDelta = newTrimLeft - prevTrimLeft
+
+  audioSlice.trimLeft = newTrimLeft
+  audioSlice.start += trimDelta
 }
 
 function trimRight(audioSlices, { payload: { id, info, scale } }) {
   const audioSlice = audioSlices[id]
   const delta = Math.round(info.delta.x / scale)
-  const newLength = audioSlice.length + delta
-  audioSlice.length = Math.max(newLength, 0)
+  const newTrimRight = audioSlice.trimRight + delta
+  audioSlice.trimRight = Math.min(
+    audioSlice.length,
+    Math.max(audioSlice.trimLeft, newTrimRight),
+  )
 }
 
 function trimEnd(audioSlices, { payload: id }) {
@@ -180,9 +199,9 @@ function trimEnd(audioSlices, { payload: id }) {
 function cut(audioSlices, { payload: { id, x, scale, newId } }) {
   const audioSlice = audioSlices[id]
   const newAudioSlice = JSON.parse(JSON.stringify(audioSlice))
-  audioSlice.length = Math.round(x / scale)
-  newAudioSlice.start += audioSlice.length
-  newAudioSlice.length -= audioSlice.length
+  audioSlice.trimRight = Math.round(x / scale) + audioSlice.trimLeft
+  newAudioSlice.start += audioSlice.trimRight - audioSlice.trimLeft
+  newAudioSlice.trimLeft += audioSlice.trimRight - audioSlice.trimLeft
   newAudioSlice.selected = false
   audioSlices[newId] = newAudioSlice
 }
@@ -214,7 +233,10 @@ export function selectSelectedAudioSliceId(state) {
 }
 
 export function selectEndTime(state) {
-  return findMax(state.audioSlices, value => value.start + value.length)
+  return findMax(
+    state.audioSlices,
+    value => value.start + value.trimRight - value.trimLeft,
+  )
 }
 
 export const audioSlicesActions = slice.actions

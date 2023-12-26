@@ -8,7 +8,7 @@ export default function Info() {
 
   const millis = padWithLeadingZeros(currentTime % 1000, 3)
   const seconds = padWithLeadingZeros(Math.floor(currentTime / 1000) % 60, 2)
-  const minutes = padWithLeadingZeros(Math.floor(seconds / 60), 2)
+  const minutes = padWithLeadingZeros(Math.floor(currentTime / 60000), 2)
 
   return (
     <p className={style.time}>

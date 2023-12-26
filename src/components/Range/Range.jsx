@@ -3,6 +3,7 @@ import { nanoid } from '@reduxjs/toolkit'
 
 export default function Range({
   value,
+  displayValue,
   min,
   max,
   name,
@@ -12,6 +13,7 @@ export default function Range({
   step = 0.01,
 }) {
   const id = nanoid()
+  if (!displayValue) displayValue = value
   return (
     <div className={style.rangeContainer}>
       <input
@@ -28,7 +30,7 @@ export default function Range({
         onChange={onChange}
       />
       <label htmlFor={id} className={style.label}>
-        {name}: {value}
+        {name}: {displayValue}
         {units}
       </label>
     </div>
