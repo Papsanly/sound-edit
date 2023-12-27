@@ -28,24 +28,46 @@ const undoConfig = {
   groupBy: action => {
     const actionsToGroup = [
       'effects/changeOption',
-      'audioSlices/trimRight',
-      'audioSlices/trimLeft',
       'audioSlices/pan',
+      'audioSlices/trimLeft',
+      'audioSlices/trimRight',
+      'audioSlices/setEditName',
     ]
-    if (actionsToGroup.includes(action.type)) {
-      return `${action.type}-${action.payload.id}`
+
+    if (
+      actionsToGroup.includes(action.type) ||
+      /Start$|End$/g.test(action.type)
+    ) {
+      const baseActionType = action.type.replace(
+        /Start$|End$|Left$|Right$/g,
+        '',
+      )
+
+      let id = action.payload.id
+      if (/Start$|End$/g.test(action.type)) {
+        id = action.payload
+      }
+
+      return `${baseActionType}-${id}`
     }
+
     return null
   },
   filter: includeAction([
     'effects/changeOption',
     'effects/toggle',
-    'audioSlices/trimRight',
-    'audioSlices/trimLeft',
-    'audioSlices/pan',
     'audioSlices/load',
+    'audioSlices/panStart',
+    'audioSlices/pan',
+    'audioSlices/panEnd',
     'audioSlices/deleteSlice',
-    'audioSlices/submitName',
+    'audioSlices/setEditNameStart',
+    'audioSlices/setEditName',
+    'audioSlices/setEditNameEnd',
+    'audioSlices/trimStart',
+    'audioSlices/trimLeft',
+    'audioSlices/trimRight',
+    'audioSlices/trimEnd',
     'audioSlices/cut',
   ]),
 }

@@ -29,8 +29,10 @@ export default function AudioSlice({ id }) {
   }, [audioSlice.isEditingName])
 
   const handleClick = e => {
-    if (activeTool === 'select') dispatch(audioSlicesActions.select(id))
-    else
+    if (activeTool === 'select') {
+      if (!audioSlice.isPanning && !audioSlice.isTriming)
+        dispatch(audioSlicesActions.select(id))
+    } else {
       dispatch(
         audioSlicesActions.cut({
           id,
@@ -39,12 +41,13 @@ export default function AudioSlice({ id }) {
           newId: window.electron.generateId(),
         }),
       )
+    }
     e.stopPropagation()
   }
 
   const handleNameInputKeyUp = e => {
     if (e.key === 'Enter') {
-      dispatch(audioSlicesActions.submitName(id))
+      dispatch(audioSlicesActions.setEditNameEnd(id))
     }
   }
 
@@ -53,7 +56,7 @@ export default function AudioSlice({ id }) {
   }
 
   const handleNameDoubleClick = () => {
-    dispatch(audioSlicesActions.startEditingName(id))
+    dispatch(audioSlicesActions.setEditNameStart(id))
   }
 
   const handleDeleteButtonClick = e => {

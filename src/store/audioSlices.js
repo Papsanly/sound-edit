@@ -62,7 +62,7 @@ function handleIntersection(audioSlices, id) {
   }
 }
 
-function submitName(audioSlices, { payload: id, revertChanges = false }) {
+function setEditNameEnd(audioSlices, { payload: id, revertChanges = false }) {
   const audioSlice = audioSlices[id]
   const editedName = audioSlice.editName.trim()
 
@@ -86,7 +86,7 @@ function deselect(audioSlices) {
   if (selectedAudioSliceId) {
     const selectedAudioSlice = audioSlices[selectedAudioSliceId]
     selectedAudioSlice.selected = false
-    submitName(audioSlices, {
+    setEditNameEnd(audioSlices, {
       payload: selectedAudioSliceId,
       revertChanges: true,
     })
@@ -154,7 +154,7 @@ function deleteSlice(audioSlices, { payload: id }) {
   delete audioSlices[id]
 }
 
-function startEditingName(audioSlices, { payload: id }) {
+function setEditNameStart(audioSlices, { payload: id }) {
   audioSlices[id].isEditingName = true
 }
 
@@ -219,9 +219,9 @@ const slice = createSlice({
     pan,
     panEnd,
     deleteSlice,
-    submitName,
-    startEditingName,
+    setEditNameStart,
     setEditName,
+    setEditNameEnd,
     trimStart,
     trimLeft,
     trimRight,
