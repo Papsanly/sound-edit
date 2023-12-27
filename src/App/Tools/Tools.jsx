@@ -6,31 +6,32 @@ import { appActions, selectApp } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import Range from '@/components/Range'
-import * as Tone from 'tone'
 import { audioSlicesActions } from '@/store/audioSlices.js'
 import { playerActions } from '@/store/player.js'
+import { loadPlayerAsync } from '@/lib/utils.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const unsubLoadedFile = window.electron.on('loaded-file', ({ id, url }) => {
-      dispatch(appActions.setLoading(true))
-      const player = new Tone.Player(url, () => {
+    const unsubLoadedFile = window.electron.on(
+      'loaded-file',
+      async ({ id, url }) => {
+        dispatch(appActions.setLoading(true))
+        const player = await loadPlayerAsync(url)
         dispatch(appActions.setLoading(false))
         dispatch(playerActions.load({ id, player }))
-      }).toDestination()
-    })
+      },
+    )
 
     const unsubSelectedFile = window.electron.on(
       'selected-file',
-      ({ id, name, path, url }) => {
+      async ({ id, name, path, url }) => {
         dispatch(appActions.setLoading(true))
-        const player = new Tone.Player(url, () => {
-          dispatch(appActions.setLoading(false))
-          dispatch(audioSlicesActions.load({ id, name, path, player }))
-        }).toDestination()
+        const player = await loadPlayerAsync(url)
+        dispatch(appActions.setLoading(false))
+        dispatch(audioSlicesActions.load({ id, name, path, player }))
       },
     )
 

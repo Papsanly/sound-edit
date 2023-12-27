@@ -1,3 +1,5 @@
+import * as Tone from 'tone'
+
 export function findInObject(obj, predicate) {
   const res = Object.entries(obj).find(([, value]) => predicate(value))
   if (res) {
@@ -23,4 +25,14 @@ export function padWithLeadingZeros(num, totalLength) {
 export function getCssProperty(property) {
   const rootStyle = getComputedStyle(document.documentElement)
   return rootStyle.getPropertyValue(property)
+}
+
+export function loadPlayerAsync(url) {
+  return new Promise((resolve, reject) => {
+    const player = new Tone.Player({
+      url,
+      onload: () => resolve(player),
+      onerror: reject,
+    }).toDestination()
+  })
 }
