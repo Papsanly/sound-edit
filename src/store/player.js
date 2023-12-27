@@ -58,8 +58,11 @@ const slice = createSlice({
       .addCase(REHYDRATE, (state, action) => {
         if (action.payload) {
           const audioSlices = action.payload.audioSlices
-          for (const id in audioSlices)
-            window.electron.send('load-file', id, audioSlices[id].path)
+          const data = Object.entries(audioSlices).map(([id, audioSlice]) => ({
+            id,
+            path: audioSlice.path,
+          }))
+          window.electron.send('load-files', data)
         }
       })
   },

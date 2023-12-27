@@ -5,7 +5,7 @@ const initialState = {
   activeControl: 'pause',
   currentTime: 0,
   scale: 0.01,
-  isLoading: false,
+  isLoading: true,
 }
 
 const slice = createSlice({

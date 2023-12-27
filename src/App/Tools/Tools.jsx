@@ -15,34 +15,45 @@ export default function Tools() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const unsubLoadedFile = window.electron.on(
-      'loaded-file',
-      async ({ id, url }) => {
-        dispatch(appActions.setLoading(true))
-        const player = await loadPlayerAsync(url)
-        dispatch(appActions.setLoading(false))
-        dispatch(playerActions.load({ id, player }))
-      },
-    )
+    const handleLoad = action => async audioData => {
+      const promises = audioData.map(({ url }) => loadPlayerAsync(url))
+      const results = await Promise.allSettled(promises)
 
-    const unsubSelectedFile = window.electron.on(
-      'selected-file',
-      async ({ id, name, path, url }) => {
-        dispatch(appActions.setLoading(true))
-        const player = await loadPlayerAsync(url)
-        dispatch(appActions.setLoading(false))
-        dispatch(audioSlicesActions.load({ id, name, path, player }))
-      },
-    )
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i]
+        if (result.status === 'fulfilled') action(audioData[i], result.value)
+        else {
+          window.electron.send(
+            'show-error',
+            'Error decoding audio data',
+            result.reason,
+          )
+        }
+      }
 
-    const unsubOpenFileCanceled = window.electron.on('open-file-canceled', () =>
-      dispatch(appActions.setLoading(false)),
-    )
+      dispatch(appActions.setLoading(false))
+    }
+
+    const unsubscribes = [
+      window.electron.on('open-file-canceled', () =>
+        dispatch(appActions.setLoading(false)),
+      ),
+      window.electron.on(
+        'selected-files',
+        handleLoad(({ id, name, path }, player) => {
+          dispatch(audioSlicesActions.load({ id, name, path, player }))
+        }),
+      ),
+      window.electron.on(
+        'loaded-files',
+        handleLoad(({ id }, player) => {
+          dispatch(playerActions.load({ id, player }))
+        }),
+      ),
+    ]
 
     return () => {
-      unsubLoadedFile()
-      unsubSelectedFile()
-      unsubOpenFileCanceled()
+      unsubscribes.forEach(unsub => unsub())
     }
   }, [dispatch])
 
