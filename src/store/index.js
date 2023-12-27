@@ -16,12 +16,6 @@ import {
   REGISTER,
 } from 'redux-persist'
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: ['player', 'app'],
-}
-
 /** @type import('redux-undo').UndoableOptions */
 const undoConfig = {
   limit: 10,
@@ -72,22 +66,29 @@ const undoConfig = {
   ]),
 }
 
+const persistConfig = {
+  key: 'undoable',
+  storage,
+  blacklist: ['player'],
+}
+
 const rootReducer = combineReducers({
   undoables: undoable(
-    combineReducers({
-      effects: effectsReducer,
-      audioSlices: audioSlicesReducer,
-    }),
+    persistReducer(
+      persistConfig,
+      combineReducers({
+        effects: effectsReducer,
+        audioSlices: audioSlicesReducer,
+        player: playerReducer,
+      }),
+    ),
     undoConfig,
   ),
   app: appReducer,
-  player: playerReducer,
 })
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 export default configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
