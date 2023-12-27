@@ -36,5 +36,5 @@ const slice = createSlice({
 })
 
 export const effectsActions = slice.actions
-export const selectEffects = state => state.effects
+export const selectEffects = state => state.undoables.present.effects
 export default slice.reducer

@@ -5,5 +5,7 @@ import Pause from './Pause.jsx'
 import Play from './Play.jsx'
 import Save from './Save.jsx'
 import Select from './Select.jsx'
+import Redo from './Redo.jsx'
+import Undo from './Undo.jsx'
 
-export { Cut, Delete, Load, Pause, Play, Save, Select }
+export { Cut, Delete, Load, Pause, Play, Save, Select, Undo, Redo }

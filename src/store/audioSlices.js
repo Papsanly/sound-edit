@@ -80,7 +80,9 @@ function submitName(audioSlices, { payload: id, revertChanges = false }) {
 }
 
 function deselect(audioSlices) {
-  const selectedAudioSliceId = selectSelectedAudioSliceId({ audioSlices })
+  const selectedAudioSliceId = selectSelectedAudioSliceId({
+    undoables: { present: { audioSlices } },
+  })
   if (selectedAudioSliceId) {
     const selectedAudioSlice = audioSlices[selectedAudioSliceId]
     selectedAudioSlice.selected = false
@@ -229,16 +231,19 @@ const slice = createSlice({
 })
 
 export function selectSelectedAudioSliceId(state) {
-  return findInObject(state.audioSlices, value => value.selected)
+  return findInObject(
+    state.undoables.present.audioSlices,
+    value => value.selected,
+  )
 }
 
 export function selectEndTime(state) {
   return findMax(
-    state.audioSlices,
+    state.undoables.present.audioSlices,
     value => value.start + value.trimRight - value.trimLeft,
   )
 }
 
 export const audioSlicesActions = slice.actions
-export const selectAudioSlices = state => state.audioSlices
+export const selectAudioSlices = state => state.undoables.present.audioSlices
 export default slice.reducer

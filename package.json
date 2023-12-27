@@ -39,7 +39,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.0.4",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
+    "redux-undo": "^1.1.0",
     "tone": "^14.7.77"
   },
   "devDependencies": {

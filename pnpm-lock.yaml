@@ -23,9 +23,15 @@ dependencies:
   react-redux:
     specifier: ^9.0.4
     version: 9.0.4(@types/react@18.2.45)(react@18.2.0)(redux@5.0.0)
+  redux-logger:
+    specifier: ^3.0.6
+    version: 3.0.6
   redux-persist:
     specifier: ^6.0.0
     version: 6.0.0(react@18.2.0)(redux@5.0.0)
+  redux-undo:
+    specifier: ^1.1.0
+    version: 1.1.0
   tone:
     specifier: ^14.7.77
     version: 14.7.77
@@ -1596,6 +1602,10 @@ packages:
     dependencies:
       mimic-response: 3.1.0
     dev: true
+
+  /deep-diff@0.3.8:
+    resolution: {integrity: sha512-yVn6RZmHiGnxRKR9sJb3iVV2XTF1Ghh2DiWRZ3dMnGc43yUdWWF/kX6lQyk3+P84iprfWKU/8zFTrlkvtFm1ug==}
+    dev: false
 
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
@@ -3228,6 +3238,12 @@ packages:
       lazy-val: 1.0.5
     dev: true
 
+  /redux-logger@3.0.6:
+    resolution: {integrity: sha512-JoCIok7bg/XpqA1JqCqXFypuqBbQzGQySrhFzewB7ThcnysTO30l4VCst86AuB9T9tuT03MAA56Jw2PNhRSNCg==}
+    dependencies:
+      deep-diff: 0.3.8
+    dev: false
+
   /redux-persist@6.0.0(react@18.2.0)(redux@5.0.0):
     resolution: {integrity: sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==}
     peerDependencies:
@@ -3247,6 +3263,10 @@ packages:
       redux: ^5.0.0
     dependencies:
       redux: 5.0.0
+    dev: false
+
+  /redux-undo@1.1.0:
+    resolution: {integrity: sha512-zzLFh2qeF0MTIlzDhDLm9NtkfBqCllQJ3OCuIl5RKlG/ayHw6GUdIFdMhzMS9NnrnWdBX5u//ExMOHpfudGGOg==}
     dev: false
 
   /redux@5.0.0:

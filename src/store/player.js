@@ -25,6 +25,7 @@ const slice = createSlice({
       })
       .addCase(audioSlicesActions.cut, (state, { payload: { id, newId } }) => {
         state[newId] = new Tone.Player().toDestination()
+        console.log(id, newId)
         state[newId].buffer = state[id].buffer
       })
       .addCase(
@@ -56,13 +57,15 @@ const slice = createSlice({
         }
       })
       .addCase(REHYDRATE, (state, action) => {
-        if (action.payload) {
-          const audioSlices = action.payload.audioSlices
+        if (action.payload && action.payload.undoables.present.audioSlices) {
+          const audioSlices = action.payload.undoables.present.audioSlices
           const data = Object.entries(audioSlices).map(([id, audioSlice]) => ({
             id,
             path: audioSlice.path,
           }))
           window.electron.send('load-files', data)
+        } else {
+          window.electron.send('load-files', [])
         }
       })
   },

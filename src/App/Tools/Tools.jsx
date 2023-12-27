@@ -1,7 +1,7 @@
 import style from './Tools.module.css'
 import Button from '@/components/Button'
 import Separator from '@/components/Separator'
-import { Cut, Select, Load, Save } from '@/assets'
+import { Cut, Select, Load, Save, Redo, Undo } from '@/assets'
 import { appActions, selectApp } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -9,6 +9,7 @@ import Range from '@/components/Range'
 import { audioSlicesActions } from '@/store/audioSlices.js'
 import { playerActions } from '@/store/player.js'
 import { loadPlayerAsync } from '@/lib/utils.js'
+import { ActionCreators } from 'redux-undo'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -59,6 +60,19 @@ export default function Tools() {
 
   return (
     <div className={style.tools}>
+      <Button
+        icon={<Undo />}
+        onClick={() => {
+          if (app.activeControl !== 'play') dispatch(ActionCreators.undo())
+        }}
+      />
+      <Button
+        icon={<Redo />}
+        onClick={() => {
+          if (app.activeControl !== 'play') dispatch(ActionCreators.redo())
+        }}
+      />
+      <Separator vertical />
       <Button
         active={app.activeTool === 'select'}
         icon={<Select />}
