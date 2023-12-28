@@ -7,6 +7,7 @@ import Effects from './Effects'
 import { useSelector } from 'react-redux'
 import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
 import { selectApp } from '@/store/app.js'
+import { Loading } from '@/assets'
 
 export default function App() {
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
@@ -14,7 +15,11 @@ export default function App() {
 
   return (
     <div className={style.app}>
-      {isLoading && <div className={style.loadingOverlay} />}
+      {isLoading && (
+        <div className={style.loadingOverlay}>
+          <Loading />
+        </div>
+      )}
       <header className={style.header}>
         <Info />
         <Controls />

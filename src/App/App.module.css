@@ -20,8 +20,17 @@
 }
 
 .loadingOverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   inset: 0;
-  background: #fff3;
+  background: #0006;
+  backdrop-filter: blur(1px);
   z-index: 12;
+}
+
+.loadingOverlay svg {
+  width: 60px;
+  height: 60px;
 }

@@ -6,7 +6,6 @@ import playerReducer from './player.js'
 import { createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import undoable, { includeAction } from 'redux-undo'
-import logger from 'redux-logger'
 import {
   persistReducer,
   FLUSH,
@@ -133,5 +132,5 @@ export default configureStore({
         ],
         ignoredPaths: [/(.*)player(.*)/g],
       },
-    }).concat(logger),
+    }),
 })
