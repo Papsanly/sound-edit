@@ -3,6 +3,7 @@ import effectsReducer from './effects.js'
 import appReducer from './app.js'
 import audioSlicesReducer from './audioSlices.js'
 import playerReducer from './player.js'
+import { createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import undoable, { includeAction } from 'redux-undo'
 import logger from 'redux-logger'
@@ -66,26 +67,54 @@ const undoConfig = {
   ]),
 }
 
+const RootTransform = createTransform(
+  (inboundState, key) => {
+    if (key === 'undoables') {
+      const { audioSlices, effects } = inboundState.present || {}
+      return { audioSlices, effects }
+    }
+    return inboundState
+  },
+  (outboundState, key) => {
+    if (key === 'undoables') {
+      return {
+        past: [],
+        present: {
+          ...outboundState,
+          player: {},
+        },
+        future: [],
+        limit: 10,
+        index: 0,
+      }
+    }
+    return outboundState
+  },
+  { whitelist: ['undoables'] },
+)
+
+/** @type import('redux-persist').PersistConfig */
 const persistConfig = {
-  key: 'undoable',
+  key: 'root',
   storage,
-  blacklist: ['player'],
+  blacklist: ['app'],
+  transforms: [RootTransform],
 }
 
-const rootReducer = combineReducers({
-  undoables: undoable(
-    persistReducer(
-      persistConfig,
+const rootReducer = persistReducer(
+  persistConfig,
+  combineReducers({
+    undoables: undoable(
       combineReducers({
         effects: effectsReducer,
         audioSlices: audioSlicesReducer,
         player: playerReducer,
       }),
+      undoConfig,
     ),
-    undoConfig,
-  ),
-  app: appReducer,
-})
+    app: appReducer,
+  }),
+)
 
 export default configureStore({
   reducer: rootReducer,
