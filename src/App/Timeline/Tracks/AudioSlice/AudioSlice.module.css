@@ -1,12 +1,14 @@
 .audioSlice {
   position: absolute;
   height: calc(var(--track-height) - 2 * var(--padding-sm));
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr auto;
+  gap: var(--padding-sm);
   border-radius: var(--round-md);
   background: var(--color-accent-default);
-  padding: var(--padding-sm);
+  padding-top: var(--padding-sm);
+  padding-bottom: var(--padding-sm);
   margin-top: var(--padding-sm);
   margin-left: var(--padding-sm);
   border-right: var(--thikness-sm) solid var(--color-accent-bright);
@@ -48,6 +50,7 @@
 
 .name,
 .editName {
+  padding-left: var(--padding-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,6 +65,10 @@
     var(--track-height) - 2 * (var(--padding-sm) - var(--thikness-sm))
   );
   z-index: 5;
+}
+
+.deleteButton {
+  padding-right: var(--padding-sm);
 }
 
 .deleteButton svg {
@@ -110,4 +117,8 @@
 
 .cutBar[data-is-hover='false'] {
   display: none;
+}
+
+.waveform {
+  grid-column: span 2;
 }

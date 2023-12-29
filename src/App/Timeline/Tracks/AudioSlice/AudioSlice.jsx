@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
 import { filterObjectByKey } from '@/lib/utils.js'
+import Waveform from './Waveform'
 
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(selectAudioSlices)
@@ -143,6 +144,7 @@ export default function AudioSlice({ id }) {
       onMouseMove={handleMouseMove}
       onClick={handleClick}
     >
+      <Waveform id={id} className={styles.waveform} />
       {activeTool === 'cut' && (
         <div
           data-is-hover={isHover}

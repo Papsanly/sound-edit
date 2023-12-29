@@ -42,7 +42,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-undo": "^1.1.0",
-    "tone": "^14.7.77"
+    "tone": "^14.7.77",
+    "wavesurfer.js": "^7.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",

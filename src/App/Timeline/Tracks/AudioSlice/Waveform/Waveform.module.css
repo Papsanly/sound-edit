@@ -1,0 +1,10 @@
+.waveform {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.waveform div {
+  height: 100%;
+  position: absolute;
+}

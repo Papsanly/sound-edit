@@ -72,4 +72,5 @@ const slice = createSlice({
 })
 
 export const playerActions = slice.actions
+export const selectPlayer = state => state.undoables.present.player
 export default slice.reducer

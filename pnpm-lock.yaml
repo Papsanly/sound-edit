@@ -35,6 +35,9 @@ dependencies:
   tone:
     specifier: ^14.7.77
     version: 14.7.77
+  wavesurfer.js:
+    specifier: ^7.6.0
+    version: 7.6.0
 
 devDependencies:
   '@types/node':
@@ -3901,6 +3904,10 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: true
+
+  /wavesurfer.js@7.6.0:
+    resolution: {integrity: sha512-fRGgzdr7QfWuiELWHuaoiXO3WXhBTejBSX6ca41onLmbvEexFWbNRX89aeHDLF+72Gcd5NLqFjxt/0Pc808JBQ==}
+    dev: false
 
   /which-boxed-primitive@1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}
