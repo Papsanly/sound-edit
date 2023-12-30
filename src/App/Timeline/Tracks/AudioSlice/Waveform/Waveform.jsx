@@ -11,7 +11,7 @@ export default function Waveform({ id, className }) {
   const containerRef = useRef(null)
   const wavesurfer = useRef(null)
   const player = useSelector(selectPlayer)[id]
-  const audioSlice = useSelector(selectAudioSlices)[id]
+  const { trimLeft } = useSelector(selectAudioSlices)[id]
   const { scale } = useSelector(selectApp)
 
   useEffect(() => {
@@ -35,10 +35,7 @@ export default function Waveform({ id, className }) {
 
   return (
     <div className={[style.waveform, className].join(' ')}>
-      <div
-        ref={containerRef}
-        style={{ left: `${-audioSlice.trimLeft * scale}px` }}
-      />
+      <div ref={containerRef} style={{ left: `${-trimLeft * scale}px` }} />
     </div>
   )
 }
