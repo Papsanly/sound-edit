@@ -3,7 +3,7 @@ import { audioSlicesActions } from '@/store/audioSlices.js'
 import { appActions } from '@/store/app.js'
 import * as Tone from 'tone'
 import { REHYDRATE } from 'redux-persist'
-import allEffects from '@/lib/effects.js'
+import { effectFunctions } from '@/lib/effects.js'
 
 const slice = createSlice({
   name: 'player',
@@ -13,12 +13,10 @@ const slice = createSlice({
       state[id] = player
     },
     applyEffect(state, { payload: { id, effectId, options } }) {
-      const player = state[id]
-      allEffects[effectId].apply(player, options)
+      effectFunctions[effectId].apply(state[id], options)
     },
     removeEffect(state, { payload: { id, effectId } }) {
-      const player = state[id]
-      allEffects[effectId].remove(player)
+      effectFunctions[effectId].remove(state[id])
     },
   },
   extraReducers(builder) {
