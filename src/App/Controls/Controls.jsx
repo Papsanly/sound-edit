@@ -19,6 +19,7 @@ export default function Controls() {
       dispatch(appActions.play({ currentTime: app.currentTime, audioSlices }))
       const now = Tone.now()
       const prevTime = app.currentTime
+      clearInterval(interval.current)
       interval.current = setInterval(() => {
         const newTime = prevTime + Math.round(1000 * (Tone.now() - now))
         dispatch(appActions.setTime(newTime))

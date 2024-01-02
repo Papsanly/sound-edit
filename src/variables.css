@@ -42,4 +42,6 @@
   --effects-width: 250px;
   --track-height: 100px;
   --option-height: 34px;
+
+  --overlay-color: rgba(0, 0, 0, 0.4);
 }

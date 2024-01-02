@@ -15,7 +15,7 @@ import Waveform from './Waveform'
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(selectAudioSlices)
   const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const { scale, activeTool, activeControl } = useSelector(selectApp)
+  const { scale, activeTool } = useSelector(selectApp)
   const audioSlice = audioSlices[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
@@ -61,7 +61,7 @@ export default function AudioSlice({ id }) {
   }
 
   const handleDeleteButtonClick = e => {
-    if (activeControl !== 'play') dispatch(audioSlicesActions.deleteSlice(id))
+    dispatch(audioSlicesActions.deleteSlice(id))
     e.stopPropagation()
   }
 

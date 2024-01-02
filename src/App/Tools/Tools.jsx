@@ -63,13 +63,13 @@ export default function Tools() {
       <Button
         icon={<Undo />}
         onClick={() => {
-          if (app.activeControl !== 'play') dispatch(ActionCreators.undo())
+          dispatch(ActionCreators.undo())
         }}
       />
       <Button
         icon={<Redo />}
         onClick={() => {
-          if (app.activeControl !== 'play') dispatch(ActionCreators.redo())
+          dispatch(ActionCreators.redo())
         }}
       />
       <Separator vertical />
