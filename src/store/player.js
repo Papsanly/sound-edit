@@ -25,7 +25,6 @@ const slice = createSlice({
       })
       .addCase(audioSlicesActions.cut, (state, { payload: { id, newId } }) => {
         state[newId] = new Tone.Player().toDestination()
-        console.log(id, newId)
         state[newId].buffer = state[id].buffer
       })
       .addCase(
