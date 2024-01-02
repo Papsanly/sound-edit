@@ -13,7 +13,7 @@ const effects = {
     enabled: false,
     options: {
       decay: { name: 'Decay', min: 0, max: 10, value: 5, units: 's' },
-      predelay: { name: 'Pre-Delay', min: 0, max: 10, value: 5, units: 's' },
+      predelay: { name: 'Pre-Delay', min: 0, max: 10, value: 0, units: 's' },
       wet: { name: 'Wet', min: 0, max: 1, value: 1, units: '' },
     },
   },
@@ -54,83 +54,43 @@ const effects = {
 
 export const effectFunctions = {
   gain: {
-    apply(player, options) {
-      player.disconnect()
-      player.chain(new Tone.Volume(options.value.value), Tone.Destination)
-    },
-    remove(player) {
-      player.disconnect()
-      player.chain(Tone.Destination)
+    get(options) {
+      return new Tone.Volume(options.value.value)
     },
   },
   reverb: {
-    apply(player, options) {
-      player.disconnect()
-      player.chain(
-        new Tone.Reverb({
-          decay: options.decay.value,
-          preDelay: options.predelay.value,
-          wet: options.wet.value,
-        }),
-        Tone.Destination,
-      )
-    },
-    remove(player) {
-      player.disconnect()
-      player.chain(Tone.Destination)
+    get(options) {
+      return new Tone.Reverb({
+        decay: options.decay.value,
+        preDelay: options.predelay.value,
+        wet: options.wet.value,
+      })
     },
   },
   delay: {
-    apply(player, options) {
-      player.disconnect()
-      player.chain(
-        new Tone.PingPongDelay(options.time.value, options.feedback.value),
-        Tone.Destination,
-      )
-    },
-    remove(player) {
-      player.disconnect()
-      player.chain(Tone.Destination)
+    get(options) {
+      return new Tone.PingPongDelay(options.time.value, options.feedback.value)
     },
   },
   distortion: {
-    apply(player, options) {
-      player.disconnect()
-      player.chain(
-        new Tone.Distortion({
-          distortion: options.value.value,
-          wet: options.wet.value,
-        }),
-        Tone.Destination,
-      )
-    },
-    remove(player) {
-      player.disconnect()
-      player.chain(Tone.Destination)
+    get(options) {
+      return new Tone.Distortion({
+        distortion: options.value.value,
+        wet: options.wet.value,
+      })
     },
   },
   eq3: {
-    apply(player, options) {
-      player.disconnect()
-      player.chain(
-        new Tone.EQ3(options.low.value, options.mid.value, options.high.value),
-        Tone.Destination,
+    get(options) {
+      return new Tone.EQ3(
+        options.low.value,
+        options.mid.value,
+        options.high.value,
       )
-    },
-    remove(player) {
-      player.disconnect()
-      player.chain(Tone.Destination)
     },
   },
   fade: {
-    apply(player, options) {
-      player.fadeIn = options.in.value
-      player.fadeOut = options.out.value
-    },
-    remove(player) {
-      player.fadeIn = 0
-      player.fadeOut = 0
-    },
+    get() {},
   },
 }
 

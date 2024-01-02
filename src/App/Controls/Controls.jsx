@@ -6,17 +6,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useCallback, useEffect, useRef } from 'react'
 import { selectAudioSlices, selectEndTime } from '@/store/audioSlices.js'
 import * as Tone from 'tone'
+import { selectEffects } from '@/store/effects.js'
 
 export default function Controls() {
   const app = useSelector(selectApp)
   const audioSlices = useSelector(selectAudioSlices)
+  const effects = useSelector(selectEffects)
   const endTime = useSelector(selectEndTime)
   const dispatch = useDispatch()
   let interval = useRef(null)
 
   const play = () => {
     if (app.currentTime < endTime) {
-      dispatch(appActions.play({ currentTime: app.currentTime, audioSlices }))
+      dispatch(
+        appActions.play({ currentTime: app.currentTime, audioSlices, effects }),
+      )
       const now = Tone.now()
       const prevTime = app.currentTime
       clearInterval(interval.current)

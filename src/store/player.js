@@ -12,12 +12,6 @@ const slice = createSlice({
     load(state, { payload: { id, player } }) {
       state[id] = player
     },
-    applyEffect(state, { payload: { id, effectId, options } }) {
-      effectFunctions[effectId].apply(state[id], options)
-    },
-    removeEffect(state, { payload: { id, effectId } }) {
-      effectFunctions[effectId].remove(state[id])
-    },
   },
   extraReducers(builder) {
     builder
@@ -36,16 +30,36 @@ const slice = createSlice({
       })
       .addCase(
         appActions.play,
-        (state, { payload: { currentTime, audioSlices } }) => {
+        (state, { payload: { currentTime, audioSlices, effects } }) => {
           for (const id in audioSlices) {
             const player = state[id]
             const audioSlice = audioSlices[id]
+            const effect = effects[id]
 
             const start = audioSlice.start - currentTime
             const startTime = Math.max(start, 0)
             const offset = audioSlice.trimLeft - Math.min(start, 0)
             const length = audioSlice.trimRight - audioSlice.trimLeft
             const duration = length + Math.min(start, 0)
+
+            const effectsChain = []
+            for (const [effectId, { get }] of Object.entries(effectFunctions)) {
+              if (effect[effectId].enabled) {
+                const { options } = effect[effectId]
+                if (effectId === 'fade') {
+                  player.fadeIn = Math.max(options.in.value - offset / 1000, 0)
+                  player.fadeOut = Math.min(
+                    options.out.value,
+                    (duration - offset) / 1000,
+                  )
+                } else {
+                  effectsChain.push(get(options))
+                }
+              }
+            }
+
+            player.disconnect()
+            player.chain(...effectsChain, Tone.Destination)
 
             if (duration > 0)
               Tone.Transport.scheduleOnce(time => {

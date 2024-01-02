@@ -4,7 +4,6 @@ import Toggle from '@/components/Toggle'
 import { effectsActions, selectEffects } from '@/store/effects.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
-import { playerActions } from '@/store/player.js'
 
 export default function EffectItem({ id }) {
   const dispatch = useDispatch()
@@ -18,19 +17,6 @@ export default function EffectItem({ id }) {
         effectId: id,
       }),
     )
-    if (effect.enabled) {
-      dispatch(
-        playerActions.removeEffect({ id: selectedAudioSliceId, effectId: id }),
-      )
-    } else {
-      dispatch(
-        playerActions.applyEffect({
-          id: selectedAudioSliceId,
-          effectId: id,
-          options: effect.options,
-        }),
-      )
-    }
   }
 
   const onOptionChange = (value, optionId) => {
@@ -40,13 +26,6 @@ export default function EffectItem({ id }) {
         audioSliceId: selectedAudioSliceId,
         effectId: id,
         optionId,
-      }),
-    )
-    dispatch(
-      playerActions.applyEffect({
-        id: selectedAudioSliceId,
-        effectId: id,
-        options: effect.options,
       }),
     )
   }
