@@ -36,3 +36,13 @@ export function loadPlayerAsync(url) {
     }).toDestination()
   })
 }
+
+export function recreatePlayers(players) {
+  return Object.fromEntries(
+    Object.entries(players).map(([id, player]) => {
+      const offlinePlayer = new Tone.Player()
+      offlinePlayer.buffer = player.buffer
+      return [id, offlinePlayer]
+    }),
+  )
+}

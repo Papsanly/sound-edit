@@ -2,7 +2,9 @@ const { app, BrowserWindow } = require('electron')
 const serve = require('electron-serve')
 const path = require('path')
 
-require('./loadAudioFile.cjs')
+require('./loadAudio.cjs')
+require('./message.cjs')
+require('./saveAudio.cjs')
 
 const loadURL = serve({ directory: 'dist' })
 

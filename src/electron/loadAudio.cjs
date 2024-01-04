@@ -19,16 +19,6 @@ async function loadFile(id, filePath) {
   }
 }
 
-ipcMain.on('show-error', (_, title, message) => {
-  dialog
-    .showMessageBox({
-      type: 'error',
-      title,
-      message: JSON.stringify(message),
-    })
-    .then()
-})
-
 ipcMain.on('load-files', async (event, data) => {
   const promises = data.map(({ id, path }) => loadFile(id, path))
   const results = await Promise.allSettled(promises)
@@ -56,7 +46,7 @@ ipcMain.on('open-file-dialog', async event => {
     })
 
     if (result.canceled) {
-      event.sender.send('open-file-canceled')
+      event.reply('open-file-canceled')
       return
     }
 

@@ -6,14 +6,48 @@ import { appActions, selectApp } from '@/store/app.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import Range from '@/components/Range'
-import { audioSlicesActions } from '@/store/audioSlices.js'
-import { playerActions } from '@/store/player.js'
-import { loadPlayerAsync } from '@/lib/utils.js'
+import {
+  audioSlicesActions,
+  selectAudioSlices,
+  selectEndTime,
+} from '@/store/audioSlices.js'
+import { play, playerActions, selectPlayer } from '@/store/player.js'
+import { loadPlayerAsync, recreatePlayers } from '@/lib/utils.js'
 import { ActionCreators } from 'redux-undo'
+import { selectEffects } from '@/store/effects.js'
+import * as Tone from 'tone'
+import { audioEncodeWav } from '@/lib/encode.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
+  const endTime = useSelector(selectEndTime)
+  const players = useSelector(selectPlayer)
+  const effects = useSelector(selectEffects)
+  const audioSlices = useSelector(selectAudioSlices)
   const dispatch = useDispatch()
+
+  const save = () => {
+    if (!audioSlices) return
+    const context = new Tone.OfflineContext(2, endTime / 1000, 44100)
+    const prevContext = Tone.getContext()
+    Tone.setContext(context)
+    const offlinePlayers = recreatePlayers(players)
+    play(
+      audioSlices,
+      offlinePlayers,
+      effects,
+      0,
+      context.destination,
+      async () => {
+        dispatch(appActions.setLoading(true))
+        Tone.Transport.start()
+        const audioBuffer = await context.render()
+        const blob = await audioEncodeWav(audioBuffer.get())
+        window.electron.send('save-audio', blob)
+        Tone.setContext(prevContext)
+      },
+    )
+  }
 
   useEffect(() => {
     const handleLoad = action => async audioData => {
@@ -25,7 +59,8 @@ export default function Tools() {
         if (result.status === 'fulfilled') action(audioData[i], result.value)
         else {
           window.electron.send(
-            'show-error',
+            'show-message',
+            'error',
             'Error decoding audio data',
             result.reason,
           )
@@ -51,6 +86,17 @@ export default function Tools() {
           dispatch(playerActions.load({ id, player }))
         }),
       ),
+      window.electron.on('saved-audio', filePath => {
+        dispatch(appActions.setLoading(false))
+        if (filePath) {
+          window.electron.send(
+            'show-message',
+            'none',
+            'Successfully Saved audio file',
+            `Saved file to ${filePath}`,
+          )
+        }
+      }),
     ]
 
     return () => {
@@ -100,7 +146,7 @@ export default function Tools() {
           window.electron.send('open-file-dialog')
         }}
       />
-      <Button icon={<Save />} />
+      <Button icon={<Save />} onClick={save} />
     </div>
   )
 }

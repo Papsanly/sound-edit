@@ -5,6 +5,56 @@ import * as Tone from 'tone'
 import { REHYDRATE } from 'redux-persist'
 import { effectFunctions } from '@/lib/effects.js'
 
+export function play(
+  audioSlices,
+  players,
+  effects,
+  currentTime,
+  destination,
+  start,
+) {
+  for (const id in audioSlices) {
+    const player = players[id]
+    const audioSlice = audioSlices[id]
+    const effect = effects[id]
+
+    const start = audioSlice.start - currentTime
+    const startTime = Math.max(start, 0)
+    const offset = audioSlice.trimLeft - Math.min(start, 0)
+    const length = audioSlice.trimRight - audioSlice.trimLeft
+    const duration = length + Math.min(start, 0)
+
+    const effectsChain = []
+    for (const [effectId, { get }] of Object.entries(effectFunctions)) {
+      if (effect[effectId].enabled) {
+        const { options } = effect[effectId]
+        if (effectId === 'fade') {
+          player.fadeIn = Math.max(
+            options.in.value + Math.min(start, 0) / 1000,
+            0,
+          )
+          player.fadeOut = options.out.value
+        } else {
+          effectsChain.push(get(options))
+        }
+      } else {
+        player.fadeIn = 0
+        player.fadeOut = 0
+      }
+    }
+
+    player.disconnect()
+    player.chain(...effectsChain, destination)
+
+    if (duration > 0)
+      Tone.Transport.scheduleOnce(time => {
+        player.start(time / 1000, offset / 1000, duration / 1000)
+      }, startTime / 1000)
+  }
+
+  start()
+}
+
 const slice = createSlice({
   name: 'player',
   initialState: {},
@@ -31,43 +81,9 @@ const slice = createSlice({
       .addCase(
         appActions.play,
         (state, { payload: { currentTime, audioSlices, effects } }) => {
-          for (const id in audioSlices) {
-            const player = state[id]
-            const audioSlice = audioSlices[id]
-            const effect = effects[id]
-
-            const start = audioSlice.start - currentTime
-            const startTime = Math.max(start, 0)
-            const offset = audioSlice.trimLeft - Math.min(start, 0)
-            const length = audioSlice.trimRight - audioSlice.trimLeft
-            const duration = length + Math.min(start, 0)
-
-            const effectsChain = []
-            for (const [effectId, { get }] of Object.entries(effectFunctions)) {
-              if (effect[effectId].enabled) {
-                const { options } = effect[effectId]
-                if (effectId === 'fade') {
-                  player.fadeIn = Math.max(options.in.value - offset / 1000, 0)
-                  player.fadeOut = Math.min(
-                    options.out.value,
-                    (duration - offset) / 1000,
-                  )
-                } else {
-                  effectsChain.push(get(options))
-                }
-              }
-            }
-
-            player.disconnect()
-            player.chain(...effectsChain, Tone.Destination)
-
-            if (duration > 0)
-              Tone.Transport.scheduleOnce(time => {
-                player.start(time / 1000, offset / 1000, duration / 1000)
-              }, startTime / 1000)
-          }
-
-          Tone.Transport.start()
+          play(audioSlices, state, effects, currentTime, Tone.Destination, () =>
+            Tone.Transport.start(),
+          )
         },
       )
       .addCase(appActions.pause, state => {
