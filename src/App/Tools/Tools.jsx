@@ -16,7 +16,7 @@ import { loadPlayerAsync, recreatePlayers } from '@/lib/utils.js'
 import { ActionCreators } from 'redux-undo'
 import { selectEffects } from '@/store/effects.js'
 import * as Tone from 'tone'
-import { audioEncodeWav } from '@/lib/encode.js'
+import toWav from 'audiobuffer-to-wav'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -39,7 +39,7 @@ export default function Tools() {
     const audioBuffer = await context.render()
     Tone.setContext(new Tone.Context())
     Tone.Transport.stop()
-    const blob = await audioEncodeWav(audioBuffer.get())
+    const blob = toWav(audioBuffer.get())
     window.electron.send('save-audio', blob)
   }
 
