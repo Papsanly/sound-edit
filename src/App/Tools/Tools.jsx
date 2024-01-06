@@ -26,27 +26,21 @@ export default function Tools() {
   const audioSlices = useSelector(selectAudioSlices)
   const dispatch = useDispatch()
 
-  const save = () => {
+  const save = async () => {
     if (!audioSlices) return
+    dispatch(appActions.setLoading(true))
     const context = new Tone.OfflineContext(2, endTime / 1000, 44100)
-    const prevContext = Tone.getContext()
     Tone.setContext(context)
     const offlinePlayers = recreatePlayers(players)
-    play(
-      audioSlices,
-      offlinePlayers,
-      effects,
-      0,
-      context.destination,
-      async () => {
-        dispatch(appActions.setLoading(true))
-        Tone.Transport.start()
-        const audioBuffer = await context.render()
-        const blob = await audioEncodeWav(audioBuffer.get())
-        window.electron.send('save-audio', blob)
-        Tone.setContext(prevContext)
-      },
-    )
+    play(audioSlices, offlinePlayers, effects, 0, context.destination)
+    await new Promise(resolve => {
+      setTimeout(() => resolve(), 10)
+    })
+    const audioBuffer = await context.render()
+    Tone.setContext(new Tone.Context())
+    Tone.Transport.stop()
+    const blob = await audioEncodeWav(audioBuffer.get())
+    window.electron.send('save-audio', blob)
   }
 
   useEffect(() => {
@@ -87,7 +81,6 @@ export default function Tools() {
         }),
       ),
       window.electron.on('saved-audio', filePath => {
-        dispatch(appActions.setLoading(false))
         if (filePath) {
           window.electron.send(
             'show-message',
@@ -96,6 +89,8 @@ export default function Tools() {
             `Saved file to ${filePath}`,
           )
         }
+        dispatch(playerActions.reloadAll())
+        dispatch(appActions.setLoading(false))
       }),
     ]
 
