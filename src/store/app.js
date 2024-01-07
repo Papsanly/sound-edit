@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { audioSlicesActions } from '@/store/audioSlices.js'
 
 const initialState = {
   activeTool: 'select',
@@ -43,6 +44,16 @@ const slice = createSlice({
     selectAudioSlice(state, { payload: audioSliceId }) {
       state.selectedAudioSliceId = audioSliceId
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(
+      audioSlicesActions.deleteSlice,
+      (state, { payload: id }) => {
+        if (state.selectedAudioSliceId === id) {
+          state.selectedAudioSliceId = null
+        }
+      },
+    )
   },
 })
 
