@@ -62,13 +62,6 @@ const slice = createSlice({
     load(state, { payload: { id, player } }) {
       state[id] = player
     },
-    reloadAll(state) {
-      for (const id in state) {
-        const player = new Tone.Player().toDestination()
-        player.buffer = state[id].buffer
-        state[id] = player
-      }
-    },
   },
   extraReducers(builder) {
     builder
