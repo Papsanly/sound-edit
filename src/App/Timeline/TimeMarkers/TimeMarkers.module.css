@@ -1,8 +1,8 @@
 .timeMarkers {
   width: 100%;
   height: var(--thikness-lg);
-  background: var(--color-background-dark);
   border-radius: var(--round-md);
+  position: relative;
 }
 
 .timeMarkers input {
@@ -18,4 +18,12 @@
   height: 20px;
   width: 20px;
   background: transparent;
+}
+
+.ticks {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  translate: 0 -95%;
 }
