@@ -6,6 +6,7 @@ const initialState = {
   activeControl: 'pause',
   currentTime: 0,
   scale: 0.01,
+  debouncedScale: 0.01,
   isLoading: true,
   selectedAudioSliceId: null,
 }
@@ -43,6 +44,9 @@ const slice = createSlice({
     },
     selectAudioSlice(state, { payload: audioSliceId }) {
       state.selectedAudioSliceId = audioSliceId
+    },
+    updateDebouncedScale(state) {
+      state.debouncedScale = state.scale
     },
   },
   extraReducers(builder) {

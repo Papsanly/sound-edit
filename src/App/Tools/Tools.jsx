@@ -132,6 +132,7 @@ export default function Tools() {
         max={0.1}
         name={'scale'}
         onChange={e => dispatch(appActions.setScale(e.target.value))}
+        onClick={() => dispatch(appActions.updateDebouncedScale())}
       />
       <Separator vertical />
       <Button

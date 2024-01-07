@@ -12,7 +12,7 @@ export default function Waveform({ id, className }) {
   const wavesurfer = useRef(null)
   const player = useSelector(selectPlayer)[id]
   const { trimLeft } = useSelector(selectAudioSlices)[id]
-  const { scale } = useSelector(selectApp)
+  const { debouncedScale, scale } = useSelector(selectApp)
 
   useEffect(() => {
     if (!player) return
@@ -21,9 +21,9 @@ export default function Waveform({ id, className }) {
       container: containerRef.current,
       waveColor: getCssProperty('--color-text-default'),
       interact: false,
-      width: player.buffer.duration * 1000 * scale,
+      width: player.buffer.duration * debouncedScale * 1000,
       height: 'auto',
-      cursorColor: '#0000',
+      cursorColor: 'transparent',
       peaks: [player.buffer.getChannelData(0), player.buffer.getChannelData(1)],
       duration: player.buffer.duration,
     })
@@ -31,11 +31,17 @@ export default function Waveform({ id, className }) {
     return () => {
       wavesurfer.current.destroy()
     }
-  }, [player, scale])
+  }, [debouncedScale, player])
 
   return (
     <div className={[style.waveform, className].join(' ')}>
-      <div ref={containerRef} style={{ left: `${-trimLeft * scale}px` }} />
+      <div
+        ref={containerRef}
+        style={{
+          left: `${-trimLeft * scale}px`,
+          scale: `${scale / debouncedScale} 1`,
+        }}
+      />
     </div>
   )
 }

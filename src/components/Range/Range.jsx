@@ -9,6 +9,7 @@ export default function Range({
   name,
   units,
   onChange,
+  onClick,
   className,
   step = 0.01,
 }) {
@@ -28,6 +29,7 @@ export default function Range({
           backgroundSize: `${((value - min) * 100) / (max - min)}% 100%`,
         }}
         onChange={onChange}
+        onClick={onClick}
       />
       <label htmlFor={id} className={style.label}>
         {name}: {displayValue}
