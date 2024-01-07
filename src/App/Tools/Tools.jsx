@@ -12,7 +12,11 @@ import {
   selectEndTime,
 } from '@/store/audioSlices.js'
 import { play, playerActions, selectPlayer } from '@/store/player.js'
-import { loadPlayerAsync, recreatePlayers } from '@/lib/utils.js'
+import {
+  getCssProperty,
+  loadPlayerAsync,
+  recreatePlayers,
+} from '@/lib/utils.js'
 import { ActionCreators } from 'redux-undo'
 import { selectEffects } from '@/store/effects.js'
 import * as Tone from 'tone'
@@ -127,7 +131,11 @@ export default function Tools() {
       <Range
         value={app.scale}
         displayValue={Math.round(app.scale * 10000) / 10}
-        min={0.0001}
+        min={
+          endTime && app.width
+            ? (app.width - parseInt(getCssProperty('--padding-sm'))) / endTime
+            : 0.0001
+        }
         step={0.0001}
         max={0.1}
         name={'scale'}
