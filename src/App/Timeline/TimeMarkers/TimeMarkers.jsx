@@ -19,10 +19,10 @@ export default function TimeMarkers() {
       container: containerRef.current,
       waveColor: 'transparent',
       interact: false,
-      width: `${width}px`,
+      width: `${Math.max(width, endTime * scale)}px`,
       height: 'auto',
       cursorColor: '#0000',
-      duration: width / scale / 1000,
+      duration: Math.max(width / scale / 1000, endTime / 1000),
       peaks: [[0]],
       plugins: [TimelinePlugin.create()],
     })
@@ -50,7 +50,7 @@ export default function TimeMarkers() {
         className={style.ticks}
         style={{
           left: `${
-            -horizontalScroll * scale + parseInt(getCssProperty('--padding-sm'))
+            -horizontalScroll + parseInt(getCssProperty('--padding-sm'))
           }px`,
         }}
         ref={containerRef}
