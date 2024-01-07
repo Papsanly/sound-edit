@@ -4,6 +4,10 @@
   border-radius: var(--round-md);
 }
 
+.button:hover {
+  background-color: var(--color-icon-muted);
+}
+
 svg {
   height: var(--icon-size-md);
   width: var(--icon-size-md);
