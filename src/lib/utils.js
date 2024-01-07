@@ -38,11 +38,10 @@ export function loadPlayerAsync(url) {
 }
 
 export function recreatePlayers(players) {
-  return Object.fromEntries(
-    Object.entries(players).map(([id, player]) => {
-      const offlinePlayer = new Tone.Player()
-      offlinePlayer.buffer = player.buffer
-      return [id, offlinePlayer]
-    }),
-  )
+  const newPlayers = {}
+  for (const id in players) {
+    newPlayers[id] = new Tone.Player().toDestination()
+    newPlayers[id].buffer = players[id].buffer
+  }
+  return newPlayers
 }

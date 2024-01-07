@@ -5,7 +5,14 @@ import * as Tone from 'tone'
 import { REHYDRATE } from 'redux-persist'
 import { effectFunctions } from '@/lib/effects.js'
 
-export function play(audioSlices, players, effects, currentTime, destination) {
+export function play(
+  audioSlices,
+  players,
+  effects,
+  currentTime,
+  destination,
+  transport,
+) {
   for (const id in audioSlices) {
     const player = players[id]
     const audioSlice = audioSlices[id]
@@ -40,12 +47,12 @@ export function play(audioSlices, players, effects, currentTime, destination) {
     player.chain(...effectsChain, destination)
 
     if (duration > 0)
-      Tone.Transport.scheduleOnce(time => {
+      transport.scheduleOnce(time => {
         player.start(time / 1000, offset / 1000, duration / 1000)
       }, startTime / 1000)
   }
 
-  Tone.Transport.start()
+  transport.start()
 }
 
 const slice = createSlice({
@@ -81,7 +88,14 @@ const slice = createSlice({
       .addCase(
         appActions.play,
         (state, { payload: { currentTime, audioSlices, effects } }) => {
-          play(audioSlices, state, effects, currentTime, Tone.getDestination())
+          play(
+            audioSlices,
+            state,
+            effects,
+            currentTime,
+            Tone.getDestination(),
+            Tone.getTransport(),
+          )
         },
       )
       .addCase(appActions.pause, state => {

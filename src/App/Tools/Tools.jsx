@@ -29,16 +29,17 @@ export default function Tools() {
   const save = async () => {
     if (!audioSlices) return
     dispatch(appActions.setLoading(true))
-    const context = new Tone.OfflineContext(2, endTime / 1000, 44100)
-    Tone.setContext(context)
-    const offlinePlayers = recreatePlayers(players)
-    play(audioSlices, offlinePlayers, effects, 0, context.destination)
-    await new Promise(resolve => {
-      setTimeout(() => resolve(), 10)
-    })
-    const audioBuffer = await context.render()
-    Tone.setContext(new Tone.Context())
-    Tone.Transport.stop()
+    const audioBuffer = await Tone.Offline(context => {
+      const offlinePlayers = recreatePlayers(players)
+      play(
+        audioSlices,
+        offlinePlayers,
+        effects,
+        0,
+        context.destination,
+        context.transport,
+      )
+    }, endTime / 1000)
     const blob = toWav(audioBuffer.get())
     window.electron.send('save-audio', blob)
   }
@@ -89,7 +90,6 @@ export default function Tools() {
             `Saved file to ${filePath}`,
           )
         }
-        dispatch(playerActions.reloadAll())
         dispatch(appActions.setLoading(false))
       }),
     ]
