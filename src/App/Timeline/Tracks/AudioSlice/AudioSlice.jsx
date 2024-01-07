@@ -1,11 +1,7 @@
 import styles from './AudioSlice.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  selectAudioSlices,
-  audioSlicesActions,
-  selectSelectedAudioSliceId,
-} from '@/store/audioSlices.js'
-import { selectApp as selectApp } from '@/store/app.js'
+import { selectAudioSlices, audioSlicesActions } from '@/store/audioSlices.js'
+import { appActions, selectApp as selectApp } from '@/store/app.js'
 import { useEffect, useRef, useState } from 'react'
 import { Delete } from '@/assets'
 import { motion } from 'framer-motion'
@@ -14,8 +10,7 @@ import Waveform from './Waveform'
 
 export default function AudioSlice({ id }) {
   const audioSlices = useSelector(selectAudioSlices)
-  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const { scale, activeTool } = useSelector(selectApp)
+  const { scale, activeTool, selectedAudioSliceId } = useSelector(selectApp)
   const audioSlice = audioSlices[id]
   const dispatch = useDispatch()
   const editNameInputRef = useRef(null)
@@ -32,7 +27,7 @@ export default function AudioSlice({ id }) {
   const handleClick = e => {
     if (activeTool === 'select') {
       if (!audioSlice.isPanning && !audioSlice.isTriming)
-        dispatch(audioSlicesActions.select(id))
+        dispatch(appActions.selectAudioSlice(id))
     } else {
       dispatch(
         audioSlicesActions.cut({
@@ -134,7 +129,7 @@ export default function AudioSlice({ id }) {
       id={id}
       ref={ref}
       className={styles.audioSlice}
-      data-selected={audioSlice.selected}
+      data-selected={selectedAudioSliceId === id}
       data-has-neighbor-left={hasLeftNeighbor}
       data-has-neighbor-right={hasRightNeighbor}
       data-is-panning={audioSlice.isPanning}

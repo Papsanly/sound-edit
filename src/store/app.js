@@ -6,6 +6,7 @@ const initialState = {
   currentTime: 0,
   scale: 0.01,
   isLoading: true,
+  selectedAudioSliceId: null,
 }
 
 const slice = createSlice({
@@ -38,6 +39,9 @@ const slice = createSlice({
     },
     setScale(state, { payload: scale }) {
       state.scale = scale
+    },
+    selectAudioSlice(state, { payload: audioSliceId }) {
+      state.selectedAudioSliceId = audioSliceId
     },
   },
 })

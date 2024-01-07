@@ -1,10 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {
-  filterObjectByKey,
-  findInObject,
-  findMax,
-  getCssProperty,
-} from '@/lib/utils.js'
+import { filterObjectByKey, findMax, getCssProperty } from '@/lib/utils.js'
 
 function isIntersecting(first, second) {
   return (
@@ -79,25 +74,6 @@ function setEditNameEnd(audioSlices, { payload: id, revertChanges = false }) {
   audioSlice.isEditingName = false
 }
 
-function deselect(audioSlices) {
-  const selectedAudioSliceId = selectSelectedAudioSliceId({
-    undoables: { present: { audioSlices } },
-  })
-  if (selectedAudioSliceId) {
-    const selectedAudioSlice = audioSlices[selectedAudioSliceId]
-    selectedAudioSlice.selected = false
-    setEditNameEnd(audioSlices, {
-      payload: selectedAudioSliceId,
-      revertChanges: true,
-    })
-  }
-}
-
-function select(audioSlices, { payload: id }) {
-  deselect(audioSlices)
-  audioSlices[id].selected = true
-}
-
 function load(audioSlices, { payload: { id, name, path, player } }) {
   const maxTrack = findMax(audioSlices, item => item.track)
   const emptyTrack = maxTrack !== null ? maxTrack + 1 : 0
@@ -106,7 +82,6 @@ function load(audioSlices, { payload: { id, name, path, player } }) {
 
   audioSlices[id] = {
     track: emptyTrack,
-    selected: false,
     start: 0,
     trimLeft: 0,
     trimRight: length,
@@ -118,13 +93,10 @@ function load(audioSlices, { payload: { id, name, path, player } }) {
     isPanning: false,
     isTriming: false,
   }
-
-  select(audioSlices, { payload: id })
 }
 
 function panStart(audioSlices, { payload: id }) {
   if (audioSlices[id].isTriming) return
-  select(audioSlices, { payload: id })
   audioSlices[id].isPanning = true
 }
 
@@ -142,7 +114,6 @@ function pan(audioSlices, { payload: { id, info, scale } }) {
 function panEnd(audioSlices, { payload: id }) {
   if (audioSlices[id].isTriming) return
 
-  select(audioSlices, { payload: id })
   const audioSlice = audioSlices[id]
   audioSlice.isPanning = false
 
@@ -164,7 +135,6 @@ function setEditName(audioSlices, { payload: { id, value } }) {
 
 function trimStart(audioSlices, { payload: id }) {
   audioSlices[id].isTriming = true
-  select(audioSlices, { payload: id })
 }
 
 function trimLeft(audioSlices, { payload: { id, info, scale } }) {
@@ -194,7 +164,6 @@ function trimRight(audioSlices, { payload: { id, info, scale } }) {
 
 function trimEnd(audioSlices, { payload: id }) {
   audioSlices[id].isTriming = false
-  select(audioSlices, { payload: id })
   handleIntersection(audioSlices, id)
 }
 
@@ -212,8 +181,6 @@ const slice = createSlice({
   name: 'audioSlices',
   initialState: {},
   reducers: {
-    deselect,
-    select,
     load,
     panStart,
     pan,
@@ -229,13 +196,6 @@ const slice = createSlice({
     cut,
   },
 })
-
-export function selectSelectedAudioSliceId(state) {
-  return findInObject(
-    state.undoables.present.audioSlices,
-    value => value.selected,
-  )
-}
 
 export function selectEndTime(state) {
   return findMax(

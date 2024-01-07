@@ -3,11 +3,11 @@ import Range from '@/components/Range'
 import Toggle from '@/components/Toggle'
 import { effectsActions, selectEffects } from '@/store/effects.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
+import { selectApp } from '@/store/app.js'
 
 export default function EffectItem({ id }) {
   const dispatch = useDispatch()
-  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
+  const { selectedAudioSliceId } = useSelector(selectApp)
   const effect = useSelector(selectEffects)[selectedAudioSliceId][id]
 
   const onToggle = () => {

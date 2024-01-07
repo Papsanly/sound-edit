@@ -5,13 +5,11 @@ import Tools from './Tools'
 import Timeline from './Timeline'
 import Effects from './Effects'
 import { useSelector } from 'react-redux'
-import { selectSelectedAudioSliceId } from '@/store/audioSlices.js'
 import { selectApp } from '@/store/app.js'
 import { Loading } from '@/assets'
 
 export default function App() {
-  const selectedAudioSliceId = useSelector(selectSelectedAudioSliceId)
-  const isLoading = useSelector(selectApp).isLoading
+  const { isLoading, selectedAudioSliceId } = useSelector(selectApp)
 
   return (
     <div className={style.app}>

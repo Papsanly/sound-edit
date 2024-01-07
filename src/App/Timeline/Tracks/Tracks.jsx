@@ -1,13 +1,9 @@
 import style from './Tracks.module.css'
 import AudioSlice from './AudioSlice'
-import {
-  selectAudioSlices,
-  audioSlicesActions,
-  selectSelectedAudioSliceId,
-} from '@/store/audioSlices.js'
+import { selectAudioSlices } from '@/store/audioSlices.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { appActions } from '@/store/app.js'
+import { appActions, selectApp } from '@/store/app.js'
 import { getCssProperty } from '@/lib/utils.js'
 
 export default function Tracks() {
@@ -16,7 +12,7 @@ export default function Tracks() {
   const ref = useRef(null)
   const [scroll, setScroll] = useState({ x: 0, y: 0 })
   const isAudioSliceSelected =
-    useSelector(selectSelectedAudioSliceId) !== undefined
+    useSelector(selectApp).selectedAudioSliceId !== null
 
   const updateWidth = useCallback(() => {
     const { width } = ref.current.getBoundingClientRect()
@@ -50,7 +46,7 @@ export default function Tracks() {
     <div
       ref={ref}
       className={style.tracks}
-      onClick={() => dispatch(audioSlicesActions.deselect())}
+      onClick={() => dispatch(appActions.selectAudioSlice(null))}
       style={{ backgroundPositionY: `${-scroll.y}px` }}
     >
       {Object.keys(audioSlices).map(id => (
