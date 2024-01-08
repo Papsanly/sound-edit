@@ -12,11 +12,7 @@ import {
   selectEndTime,
 } from '@/store/audioSlices.js'
 import { play, playerActions, selectPlayer } from '@/store/player.js'
-import {
-  getCssProperty,
-  loadPlayerAsync,
-  recreatePlayers,
-} from '@/lib/utils.js'
+import { loadPlayerAsync, recreatePlayers } from '@/lib/utils.js'
 import { ActionCreators } from 'redux-undo'
 import { selectEffects } from '@/store/effects.js'
 import * as Tone from 'tone'

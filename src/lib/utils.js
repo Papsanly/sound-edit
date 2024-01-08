@@ -1,12 +1,5 @@
 import * as Tone from 'tone'
 
-export function findInObject(obj, predicate) {
-  const res = Object.entries(obj).find(([, value]) => predicate(value))
-  if (res) {
-    return res[0]
-  }
-}
-
 export function filterObjectByKey(obj, predicate) {
   return Object.entries(obj)
     .filter(([key]) => predicate(key))
