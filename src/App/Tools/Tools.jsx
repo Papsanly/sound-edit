@@ -131,11 +131,7 @@ export default function Tools() {
       <Range
         value={app.scale}
         displayValue={Math.round(app.scale * 10000) / 10}
-        min={
-          endTime && app.width
-            ? (app.width - parseInt(getCssProperty('--padding-sm'))) / endTime
-            : 0.0001
-        }
+        min={0.0001}
         step={0.0001}
         max={0.1}
         name={'scale'}
