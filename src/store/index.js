@@ -15,6 +15,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
+import logger from 'redux-logger'
 
 /** @type import('redux-undo').UndoableOptions */
 const undoConfig = {
@@ -48,6 +49,7 @@ const undoConfig = {
     return null
   },
   filter: includeAction([
+    'player/load',
     'effects/changeOption',
     'effects/toggle',
     'audioSlices/load',
@@ -83,8 +85,6 @@ const RootTransform = createTransform(
           player: {},
         },
         future: [],
-        limit: 10,
-        index: 0,
       }
     }
     return outboundState
@@ -132,7 +132,7 @@ export default configureStore({
         ],
         ignoredPaths: [/(.*)player(.*)/g],
       },
-    }),
+    }).concat(logger),
 })
 
 export const selectPast = state => state.undoables.past
