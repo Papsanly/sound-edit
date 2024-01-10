@@ -15,7 +15,6 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import logger from 'redux-logger'
 
 /** @type import('redux-undo').UndoableOptions */
 const undoConfig = {
@@ -132,7 +131,7 @@ export default configureStore({
         ],
         ignoredPaths: [/(.*)player(.*)/g],
       },
-    }).concat(logger),
+    }),
 })
 
 export const selectPast = state => state.undoables.past
