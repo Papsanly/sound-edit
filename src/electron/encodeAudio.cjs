@@ -2,12 +2,15 @@ const fs = require('fs')
 const ffmpegStatic = require('ffmpeg-static')
 const { spawn } = require('child_process')
 const wav = require('node-wav')
+const os = require('os')
+const path = require('path')
 
 /** @return Buffer */
 function encodeAudio(channels, sampleRate, encoding) {
   return new Promise((resolve, reject) => {
-    const tempWavPath = 'temp.wav'
-    const outputFilePath = `output.${encoding}`
+    const tempDir = os.tmpdir()
+    const tempWavPath = path.join(tempDir, 'temp.wav')
+    const tempMp3FilePath = path.join(tempDir, 'temp.mp3')
 
     const wavBuffer = wav.encode(channels, { sampleRate, float: true })
 
@@ -15,10 +18,11 @@ function encodeAudio(channels, sampleRate, encoding) {
 
     fs.writeFileSync(tempWavPath, wavBuffer)
 
-    const ffmpegProcess = spawn(ffmpegStatic, [
+    const ffmpegPath = ffmpegStatic.replace('app.asar', 'app.asar.unpacked')
+    const ffmpegProcess = spawn(ffmpegPath, [
       '-i',
       tempWavPath,
-      outputFilePath,
+      tempMp3FilePath,
     ])
 
     ffmpegProcess.on('close', code => {
@@ -26,9 +30,9 @@ function encodeAudio(channels, sampleRate, encoding) {
         reject(new Error(`FFmpeg exited with code ${code}`))
         return
       }
-      const mp3Buffer = fs.readFileSync(outputFilePath)
+      const mp3Buffer = fs.readFileSync(tempMp3FilePath)
       fs.rmSync(tempWavPath)
-      fs.rmSync(outputFilePath)
+      fs.rmSync(tempMp3FilePath)
       resolve(mp3Buffer)
     })
 

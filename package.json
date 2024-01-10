@@ -23,6 +23,10 @@
       "target": "msi",
       "icon": "public/favicon.ico"
     },
+    "asar": true,
+    "asarUnpack": [
+      "**/ffmpeg.exe"
+    ],
     "directories": {
       "output": "electron-dist"
     },
