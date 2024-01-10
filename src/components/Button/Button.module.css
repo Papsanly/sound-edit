@@ -21,3 +21,11 @@ svg {
 .button[data-active='true'] svg {
   fill: var(--color-icon-dark);
 }
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button:disabled:hover {
+  background-color: transparent;
+}

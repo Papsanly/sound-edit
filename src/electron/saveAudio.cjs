@@ -11,7 +11,7 @@ ipcMain.on('save-audio', async (event, data) => {
   try {
     const result = await dialog.showSaveDialog({
       defaultPath: `output.${data.encoding}`,
-      filters: [{ name: 'Audio', extensions: ['wav', 'mp3'] }],
+      filters: [{ name: 'Audio', extensions: [data.encoding] }],
     })
     if (!result.canceled) {
       await fs.writeFile(result.filePath, encoded)

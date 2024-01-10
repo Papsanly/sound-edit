@@ -134,3 +134,6 @@ export default configureStore({
       },
     }),
 })
+
+export const selectPast = state => state.undoables.past
+export const selectFuture = state => state.undoables.future

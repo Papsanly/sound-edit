@@ -44,6 +44,7 @@ export default function Controls() {
     <div className={style.controls}>
       <Button
         active={app.activeControl === 'play'}
+        disabled={Object.keys(audioSlices).length === 0}
         icon={<Play />}
         onClick={play}
       />

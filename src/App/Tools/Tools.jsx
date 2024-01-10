@@ -17,6 +17,7 @@ import { ActionCreators } from 'redux-undo'
 import { selectEffects } from '@/store/effects.js'
 import * as Tone from 'tone'
 import Popup from '@/components/Popup'
+import { selectFuture, selectPast } from '@/store/index.js'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -24,6 +25,8 @@ export default function Tools() {
   const players = useSelector(selectPlayer)
   const effects = useSelector(selectEffects)
   const audioSlices = useSelector(selectAudioSlices)
+  const past = useSelector(selectPast)
+  const future = useSelector(selectFuture)
   const dispatch = useDispatch()
 
   const save = async encoding => {
@@ -109,12 +112,14 @@ export default function Tools() {
     <div className={style.tools}>
       <Button
         icon={<Undo />}
+        disabled={past.length === 0}
         onClick={() => {
           dispatch(ActionCreators.undo())
         }}
       />
       <Button
         icon={<Redo />}
+        disabled={future.length === 0}
         onClick={() => {
           dispatch(ActionCreators.redo())
         }}
@@ -148,7 +153,7 @@ export default function Tools() {
           window.electron.send('open-file-dialog')
         }}
       />
-      <Popup icon={<Save />}>
+      <Popup icon={<Save />} disabled={Object.keys(audioSlices).length === 0}>
         <ul className={style.saveDialog}>
           <li onClick={() => save('mp3')}>mp3</li>
           <li onClick={() => save('wav')}>wav</li>

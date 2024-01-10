@@ -14,7 +14,10 @@ function encodeAudio(channels, sampleRate, encoding) {
 
     const wavBuffer = wav.encode(channels, { sampleRate, float: true })
 
-    if (encoding === 'wav') resolve(wavBuffer)
+    if (encoding === 'wav') {
+      resolve(wavBuffer)
+      return
+    }
 
     fs.writeFileSync(tempWavPath, wavBuffer)
 
