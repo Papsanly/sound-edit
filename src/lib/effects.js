@@ -22,7 +22,7 @@ const effects = {
     enabled: false,
     options: {
       time: { name: 'Time', min: 0, max: 10, value: 5, units: 's' },
-      feedback: { name: 'Feedback', min: 0, max: 1, value: 1, units: '' },
+      feedback: { name: 'Feedback', min: 0, max: 1, value: 0.5, units: '' },
     },
   },
   distortion: {
