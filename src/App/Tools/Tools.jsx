@@ -12,11 +12,11 @@ import {
   selectEndTime,
 } from '@/store/audioSlices.js'
 import { play, playerActions, selectPlayer } from '@/store/player.js'
-import { loadPlayerAsync, recreatePlayers } from '@/lib/utils.js'
+import { loadPlayerAsync, recreatePlayers } from '@/lib/audio.js'
 import { ActionCreators } from 'redux-undo'
 import { selectEffects } from '@/store/effects.js'
 import * as Tone from 'tone'
-import toWav from 'audiobuffer-to-wav'
+import Popup from '@/components/Popup'
 
 export default function Tools() {
   const app = useSelector(selectApp)
@@ -26,7 +26,7 @@ export default function Tools() {
   const audioSlices = useSelector(selectAudioSlices)
   const dispatch = useDispatch()
 
-  const save = async () => {
+  const save = async encoding => {
     if (!audioSlices) return
     dispatch(appActions.setLoading(true))
     const audioBuffer = await Tone.Offline(context => {
@@ -40,8 +40,14 @@ export default function Tools() {
         context.transport,
       )
     }, endTime / 1000)
-    const blob = toWav(audioBuffer.get())
-    window.electron.send('save-audio', blob)
+    window.electron.send('save-audio', {
+      channels: [
+        audioBuffer.get().getChannelData(0),
+        audioBuffer.get().getChannelData(1),
+      ],
+      sampleRate: audioBuffer.sampleRate,
+      encoding,
+    })
   }
 
   useEffect(() => {
@@ -142,7 +148,12 @@ export default function Tools() {
           window.electron.send('open-file-dialog')
         }}
       />
-      <Button icon={<Save />} onClick={save} />
+      <Popup icon={<Save />}>
+        <ul className={style.saveDialog}>
+          <li onClick={() => save('mp3')}>mp3</li>
+          <li onClick={() => save('wav')}>wav</li>
+        </ul>
+      </Popup>
     </div>
   )
 }

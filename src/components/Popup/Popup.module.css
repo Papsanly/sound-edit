@@ -1,0 +1,35 @@
+.popup {
+  position: relative;
+}
+
+.children {
+  position: absolute;
+  top: calc(100% + var(--padding-md));
+  left: 50%;
+  translate: -50% 0;
+  z-index: 20;
+  background: var(--color-background-default);
+  padding: var(--padding-md);
+  border-radius: var(--round-md);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  background: var(--overlay-color);
+  backdrop-filter: blur(1px);
+}
+
+.toggleButton {
+  position: relative;
+  z-index: 20;
+}
+
+.popup[data-is-open='true'] .toggleButton {
+  background: var(--color-background-default);
+}
+
+.popup[data-is-open='true'] .toggleButton:hover {
+  background: var(--color-icon-muted);
+}

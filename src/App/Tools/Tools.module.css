@@ -2,3 +2,18 @@
   display: flex;
   gap: var(--padding-sm);
 }
+
+.saveDialog {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.saveDialog li {
+  padding: var(--padding-sm) var(--padding-md);
+  border-radius: var(--round-md);
+}
+
+.saveDialog li:hover {
+  background: var(--color-icon-muted);
+}

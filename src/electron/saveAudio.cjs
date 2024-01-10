@@ -1,11 +1,17 @@
 const { ipcMain, dialog } = require('electron')
+const encodeAudio = require('./encodeAudio.cjs')
 const fs = require('fs').promises
 
-ipcMain.on('save-audio', async (event, blob) => {
+ipcMain.on('save-audio', async (event, data) => {
+  const encoded = await encodeAudio(
+    data.channels,
+    data.sampleRate,
+    data.encoding,
+  )
   try {
     const result = await dialog.showSaveDialog({})
     if (!result.canceled) {
-      await fs.writeFile(result.filePath, Buffer.from(blob))
+      await fs.writeFile(result.filePath, encoded)
     }
     event.reply('saved-audio', result.filePath)
   } catch (error) {
