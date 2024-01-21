@@ -5,7 +5,7 @@ import audioSlicesReducer from './audioSlices.js'
 import playerReducer from './player.js'
 import { createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import undoable, { includeAction } from 'redux-undo'
+import undoable, { includeAction, newHistory } from 'redux-undo'
 import {
   persistReducer,
   FLUSH,
@@ -77,14 +77,14 @@ const RootTransform = createTransform(
   },
   (outboundState, key) => {
     if (key === 'undoables') {
-      return {
-        past: [],
-        present: {
+      return newHistory(
+        [],
+        {
           ...outboundState,
           player: {},
         },
-        future: [],
-      }
+        [],
+      )
     }
     return outboundState
   },

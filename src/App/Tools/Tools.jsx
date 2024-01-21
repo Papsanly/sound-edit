@@ -82,13 +82,13 @@ export default function Tools() {
         'selected-files',
         handleLoad(({ id, name, path }, player) => {
           dispatch(audioSlicesActions.load({ id, name, path, player }))
-          ActionCreators.clearHistory()
         }),
       ),
       window.electron.on(
         'loaded-files',
         handleLoad(({ id }, player) => {
           dispatch(playerActions.load({ id, player }))
+          dispatch(ActionCreators.clearHistory())
         }),
       ),
       window.electron.on('saved-audio', filePath => {
